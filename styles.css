@@ -1,77 +1,416 @@
-/* ============================================================
-   styles.css — this is YOURS to change. That is the point.
-   Every value below is a decision somebody made. Change one,
-   commit, and look at what happened.
-   ============================================================ */
-
-/* The custom properties. Change a colour ONCE here and it
-   changes everywhere it is used further down. */
 :root {
-  --ink:        #1a1a1a;   /* body text */
-  --muted:      #5a6472;   /* quieter text */
-  --accent:     #0a6373;   /* links and rules — make this yours */
-  --paper:      #ffffff;
-  --line:       #e2e6ec;
-  --measure:    34rem;     /* how wide a line of text gets before it wraps */
+  --ink: #17221f;
+  --muted: #68716d;
+  --paper: #f3f1ea;
+  --panel: #fbfaf5;
+  --line: #d8d8ce;
+  --mint: #b8e3ca;
+  --yellow: #f3d66f;
+  --coral: #ed785f;
+  --blue: #b9d9e8;
 }
 
 /* A sensible reset. Without border-box, padding makes boxes
    wider than you asked for, and nothing lines up. */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
-  margin: 0 auto;
-  padding: 3rem 1.25rem 4rem;
-  max-width: var(--measure);
+  margin: 0;
+  padding: 2rem clamp(1.25rem, 4vw, 5rem) 3rem;
   background: var(--paper);
+  background-image: radial-gradient(#d5d3c9 0.7px, transparent 0.7px);
+  background-size: 14px 14px;
   color: var(--ink);
-  font: 1rem/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font: 1rem/1.5 Georgia, 'Times New Roman', serif;
+}
+
+.site-header,
+main,
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(2rem, 6vw, 5rem);
+}
+
+.monogram {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  color: var(--ink);
+  font: 700 0.85rem/1 Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.eyebrow,
+.label,
+.tile-topline,
+.project-tag,
+footer {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.eyebrow span {
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.35rem;
+  margin: 0 0.45rem 0.1rem;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(150px, auto);
+  gap: 1rem;
+}
+
+.tile {
+  position: relative;
+  min-height: 180px;
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--panel);
+}
+
+.tile-hero {
+  grid-column: span 7;
+  grid-row: span 2;
+  min-height: 430px;
+  background: var(--mint);
+}
+
+.tile-now {
+  grid-column: span 5;
+  background: var(--yellow);
+}
+
+.tile-chat {
+  grid-column: span 5;
+  background: var(--blue);
+}
+
+.tile-python {
+  grid-column: span 4;
+  background: var(--coral);
+}
+
+.tile-projects {
+  grid-column: span 5;
+}
+
+.tile-quote {
+  grid-column: span 3;
+  background: var(--yellow);
+}
+
+.tile-contact {
+  grid-column: span 5;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
 }
 
 h1 {
-  margin: 0;
-  font-size: 2.15rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  max-width: 7ch;
+  margin: 1rem 0 1.5rem;
+  font-size: clamp(3.7rem, 8vw, 7.3rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
 }
 
-.tagline {
-  margin: 0.5rem 0 0;
-  color: var(--muted);
-  font-size: 1.05rem;
+h1 em {
+  color: var(--coral);
+  font-style: normal;
 }
 
 h2 {
-  margin: 2.75rem 0 0.75rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.82rem;
+  margin-bottom: 0.7rem;
+  font-size: clamp(1.55rem, 3vw, 2.55rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.hero-copy {
+  max-width: 31rem;
+  margin-bottom: 0;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.4;
+}
+
+.label {
+  margin-bottom: 1.3rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
 }
 
-ul { margin: 0; padding-left: 1.1rem; }
-li { margin-bottom: 0.6rem; }
-
-a {
-  color: var(--accent);
-  text-underline-offset: 3px;
+.tile-now h2 span {
+  color: var(--coral);
 }
-a:hover { text-decoration: none; }
+
+.tile p:not(.eyebrow):not(.label) {
+  max-width: 28rem;
+  color: #47514d;
+}
+
+.tile-contact p {
+  color: #c9d0ca !important;
+}
+
+.hero-mark {
+  position: absolute;
+  right: 2rem;
+  bottom: 1.5rem;
+  display: flex;
+  gap: 0.65rem;
+  color: var(--coral);
+  font: 2rem/1 Arial, sans-serif;
+}
+
+.hero-mark span:nth-child(2) {
+  transform: translateY(-1rem);
+}
+
+.hero-mark span:nth-child(3) {
+  transform: translateY(-2rem);
+}
+
+.tile-topline {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.2rem;
+  color: var(--muted);
+  font: 0.68rem/1 Arial, sans-serif;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0.1rem 0.45rem 0 0;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.tile-chat .tile-topline {
+  justify-content: flex-start;
+}
+
+.chat-lines {
+  display: grid;
+  gap: 0.35rem;
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  width: 36%;
+}
+
+.chat-lines span {
+  display: block;
+  height: 0.45rem;
+  border-radius: 2px;
+  background: rgba(23, 34, 31, 0.3);
+}
+
+.chat-lines span:nth-child(2) {
+  width: 75%;
+}
+
+.chat-lines span:nth-child(3) {
+  width: 50%;
+}
+
+.python-badge {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  margin: 0.2rem 0 1.3rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--yellow);
+  font: 700 1rem Arial, sans-serif;
+}
+
+.tile-python h2 {
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--line);
+  font: 0.95rem Arial, sans-serif;
+}
+
+.project-number {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.project-tag {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  color: var(--muted);
+  font-size: 0.55rem;
+}
+
+.project-note {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+}
+
+.quote-mark {
+  display: block;
+  height: 2.1rem;
+  color: var(--coral);
+  font: 4rem/1 Georgia, serif;
+}
+
+blockquote {
+  max-width: 10ch;
+  margin: 0 0 1rem;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.tile-quote p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.tile-contact h2 {
+  margin-bottom: 2.2rem;
+  color: var(--paper);
+}
+
+.email-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8rem;
+  border-top: 1px solid #5e6862;
+  color: var(--paper);
+  font: 0.85rem Arial, sans-serif;
+  text-decoration: none;
+}
+
+.email-link span {
+  color: var(--yellow);
+  font-size: 1.2rem;
+}
 
 footer {
-  margin-top: 3.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
+  margin-top: 1.5rem;
+  padding: 0.7rem 0;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.62rem;
 }
 
-/* Someone reading this on a phone is the common case, not the
-   edge case. Test it there before you call the page done. */
-@media (max-width: 30rem) {
-  body { padding-top: 2rem; }
-  h1   { font-size: 1.8rem; }
+@media (max-width: 700px) {
+  body {
+    padding: 1.25rem 1rem 2rem;
+  }
+
+  .site-header {
+    margin-bottom: 2rem;
+  }
+
+  .bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .tile {
+    min-height: 210px;
+    padding: 1.25rem;
+  }
+
+  .tile-hero {
+    grid-column: span 2;
+    min-height: 390px;
+  }
+
+  .tile-now,
+  .tile-chat,
+  .tile-python,
+  .tile-projects,
+  .tile-quote,
+  .tile-contact {
+    grid-column: span 1;
+  }
+
+  .tile-projects,
+  .tile-contact {
+    grid-column: span 2;
+  }
+
+  .tile-now h2,
+  .tile-chat h2 {
+    font-size: 1.75rem;
+  }
+
+  .hero-mark {
+    right: 1.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .bento {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tile,
+  .tile-hero {
+    min-height: auto;
+  }
+
+  .tile-hero {
+    min-height: 360px;
+  }
+
+  .tile-chat,
+  .tile-python,
+  .tile-quote {
+    min-height: 220px;
+  }
+
+  .tile-contact {
+    min-height: 250px;
+  }
 }
