@@ -36,13 +36,8 @@ main{ max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
   padding: 1rem 1.25rem;
 
   /* YOUR CODE HERE */
-.cards {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-}
-}
+
+
 
 .logo{ font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; }
 
@@ -66,13 +61,18 @@ main{ max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
 .cards{
 
   /* YOUR CODE HERE */
-
+.cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
 }
 
 .card{
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: #96e9a5;
+  border: 1px solid #003098;
+  border-radius: 14px;
   padding: 1.25rem;
 
   /* YOUR CODE HERE — how does a card take an equal share? */
