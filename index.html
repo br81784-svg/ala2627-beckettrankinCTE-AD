@@ -17,13 +17,17 @@
 
   <header class="site-header">
     <a class="monogram" href="./" aria-label="Beckett's homepage">BR</a>
-    <p class="eyebrow">A work in progress <span></span> August 2026</p>
+    <div class="header-meta">
+      <p class="eyebrow">A work in progress <span></span> <time id="today">August 2026</time></p>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">Shift the light
+        <span>↗</span></button>
+    </div>
   </header>
 
   <main>
 
     <section class="bento" aria-label="Beckett's story">
-      <article class="tile tile-hero">
+      <article class="tile tile-hero" data-reveal data-tilt>
         <p class="eyebrow">Hello, I’m Beckett</p>
         <h1>Learning by<br><em>making.</em></h1>
         <p class="hero-copy">I’m finding my way into code one curious project at a time — with Python, apps, and a
@@ -31,26 +35,26 @@
         <div class="hero-mark" aria-hidden="true"><span>+</span><span>+</span><span>+</span></div>
       </article>
 
-      <article class="tile tile-now">
+      <article class="tile tile-now" data-reveal data-tilt>
         <p class="label">Right now</p>
         <h2>Getting into<br>GitHub<span>.</span></h2>
         <p>Learning how to share the work, keep track of the process, and make something that can keep growing.</p>
       </article>
 
-      <article class="tile tile-chat">
+      <article class="tile tile-chat" data-reveal data-tilt>
         <div class="tile-topline"><span class="status-dot"></span><span>experiment_02</span></div>
         <h2>A chatbot<br>of sorts</h2>
         <p>One of the first signs that an idea can become an interaction.</p>
         <div class="chat-lines" aria-hidden="true"><span></span><span></span><span></span></div>
       </article>
 
-      <article class="tile tile-python">
+      <article class="tile tile-python" data-reveal data-tilt>
         <p class="label">The toolkit</p>
         <div class="python-badge">Py</div>
         <h2>Learning<br>the basics of<br>Python.</h2>
       </article>
 
-      <article class="tile tile-projects">
+      <article class="tile tile-projects" data-reveal data-tilt>
         <div class="tile-topline"><span>Things I’ve made</span><span class="arrow">↗</span></div>
         <div class="project-row"><span class="project-number">01</span><strong>Painter project</strong><span
             class="project-tag">play</span></div>
@@ -59,13 +63,13 @@
         <p class="project-note">Small builds, real practice, a lot more to come.</p>
       </article>
 
-      <article class="tile tile-quote">
+      <article class="tile tile-quote" data-reveal data-tilt>
         <span class="quote-mark">“</span>
         <blockquote>So far I am having fun.</blockquote>
         <p>That’s the point.</p>
       </article>
 
-      <article class="tile tile-contact">
+      <article class="tile tile-contact" data-reveal data-tilt>
         <p class="label">Keep in touch</p>
         <h2>Let’s see<br>what’s next.</h2>
         <a class="email-link" href="mailto:beckettrankin31@gmail.com">beckettrankin31@gmail.com <span>↗</span></a>
@@ -77,6 +81,8 @@
   <footer>
     <p>Built by hand · Beckett Rankin · 2026</p>
   </footer>
+
+  <script src="app.js"></script>
 
 </body>
 
