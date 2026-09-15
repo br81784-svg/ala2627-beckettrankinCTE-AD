@@ -101,11 +101,11 @@ a.b{display:inline-block;text-decoration:none}
   color:var(--ss-faint,#74809a);margin-bottom:.35rem}
 .seg{display:flex;flex-wrap:wrap;gap:.35rem}
 .seg button{cursor:pointer;font:600 .78rem/1 var(--ss-mono,ui-monospace,monospace);padding:.45rem .7rem;
-  border-radius:8px;border:1px solid var(--ss-border,#2a3142);background:transparent;color:var(--ss-mist,#9aabd0)}
-.seg button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ss-void,#0d1322)}
-.readout{margin-top:.9rem;background:#0b0f18;border:1px solid var(--ss-border,#2a3142);border-radius:10px;
-  padding:.8rem .9rem;font:.82rem/1.7 var(--ss-mono,ui-monospace,monospace);color:#cbd5e1;overflow-x:auto}
-.readout .p{color:var(--ss-peri,#818cf8)}.readout .v{color:var(--ss-green,#3effa0)}
+  border-radius:8px;border:1px solid var(--ss-border,#0042dc);background:transparent;color:var(--ss-mist,#f00000)}
+.seg button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--ss-void,#f00000)}
+.readout{margin-top:.9rem;background:#0042dc;border:1px solid var(--ss-border,#2a3142);border-radius:10px;
+  padding:.8rem .9rem;font:.82rem/1.7 var(--ss-mono,ui-monospace,monospace);color:#f00000;overflow-x:auto}
+.readout .p{color:var(--ss-peri,#0042dc)}.readout .v{color:var(--ss-green,#3effa0)}
 .axis{margin-top:.75rem;font-size:.87rem;color:var(--ss-mist,#9aabd0)}
 .axis b{color:var(--acc)}
 .slid{width:100%;accent-color:var(--acc)}
@@ -182,7 +182,7 @@ footer{max-width:96rem;margin:2rem auto 0;color:var(--ss-faint,#74809a);font-siz
       <p class="slo">Make the project site mine, connect a JavaScript file to it, and prove the JavaScript is running.</p>
       <div class="row">
         <button class="b solid" data-open="m-read" type="button">What am I learning?</button>
-        
+
         <button class="b" data-open="m-files" type="button">Files &amp; terminal</button>
       </div>
     </section>
@@ -236,7 +236,7 @@ Do not change anything else in my code.</pre></div>
   <dialog id="m-read"><div class="sheet"><button class="x" data-close type="button">Close</button>
     <h3>What am I learning?</h3><p>This week your site stops just sitting there. By Friday, clicking something on it will do a thing only your site does — and you will have built it yourself, in JavaScript.</p><p>Today is the setup, and it matters more than it sounds. First you get the whole week in one go, so there is nothing to pull again until next week. Then you make the project yours — your topic, your colours, your words — because a feature on somebody else's page is not your feature.</p><p>Last, you prove your JavaScript is running with one line: console.log. The console is where JavaScript talks back to you. School Chromebooks block the browser's own console, so your project has one built in — a panel along the bottom of your page. console.log prints there, and so does every error. When something goes wrong this week, that panel is where it tells you what, so you learn to read it on day one.</p></div></dialog>
 
-  
+
 
   <dialog id="m-files"><div class="sheet"><button class="x" data-close type="button">Close</button>
     <h3>Files &amp; terminal</h3>
