@@ -61,13 +61,7 @@ main{ max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
 .cards{
 
   /* YOUR CODE HERE */
-.cards {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-}let messages = ["Hi", "I like to play baseball", "Bye"];
-let spot = 0;
+.
 
 function next() {
   spot = (spot + 1) % messages.length;
