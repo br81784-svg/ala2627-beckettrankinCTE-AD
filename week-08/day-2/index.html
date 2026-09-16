@@ -473,14 +473,16 @@
       overflow: hidden;
       border-radius: 18px;
       border: 1px solid rgba(255, 255, 255, .1);
-      background: linear-gradient(180deg, #0f2a49, #10243b 35%, #0b1b29 100%)
+      background: linear-gradient(180deg, #0f2a49, #10243b 35%, #0b1b29 100%);
+      box-shadow: inset 0 0 26px rgba(118, 187, 255, .12), 0 0 28px rgba(53, 110, 156, .17)
     }
 
     .batting-game .bat-scene::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, .12), transparent 36%)
+      background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, .12), transparent 36%), radial-gradient(circle at 50% 75%, rgba(255, 205, 87, .12), transparent 30%);
+      animation: crowdGlow 2.6s ease-in-out infinite alternate
     }
 
     .batting-game .bat-scene::after {
@@ -490,6 +492,55 @@
       border: 2px dashed rgba(255, 255, 255, .12);
       border-radius: 50%;
       pointer-events: none
+    }
+
+    @keyframes crowdGlow {
+      from {
+        box-shadow: inset 0 0 30px rgba(120, 175, 255, .08), 0 0 18px rgba(53, 110, 156, .12);
+      }
+
+      to {
+        box-shadow: inset 0 0 38px rgba(255, 209, 93, .12), 0 0 32px rgba(90, 135, 210, .24);
+      }
+    }
+
+    .batting-game .scoreboard {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 7;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .55rem .75rem;
+      border-radius: 12px;
+      background: rgba(8, 14, 19, .7);
+      border: 1px solid rgba(255, 255, 255, .1);
+      box-shadow: 0 0 18px rgba(97, 173, 255, .18)
+    }
+
+    .batting-game .score-chip {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font: 700 .62rem/1 var(--ss-mono, ui-monospace, monospace);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #dfe7ff
+    }
+
+    .batting-game .score-chip strong {
+      display: inline-grid;
+      place-items: center;
+      min-width: 2rem;
+      min-height: 1.8rem;
+      padding: .1rem .35rem;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #07151f, #0b2433);
+      border: 1px solid rgba(144, 213, 255, .18);
+      color: #f9fbff;
+      box-shadow: inset 0 0 10px rgba(114, 204, 255, .18)
     }
 
     .batting-game .field-top {
@@ -983,6 +1034,10 @@
         <span class="k">Game challenge</span>
         <h2 id="batting-title">Time the swing</h2>
         <div class="bat-scene" aria-live="polite">
+          <div class="scoreboard">
+            <div class="score-chip"><span>Score</span><strong id="score-count">0</strong></div>
+            <div class="score-chip"><span>Best</span><strong id="best-count">0</strong></div>
+          </div>
           <div class="field-top"></div>
           <div class="pitch-zone" aria-hidden="true"></div>
           <div class="ball" id="pitch-ball" aria-label="Baseball"></div>
@@ -1279,11 +1334,15 @@ python -m http.server 8000</pre>
       status: document.getElementById("game-status"),
       swingBtn: document.getElementById("swing-btn"),
       resetBtn: document.getElementById("reset-btn"),
+      scoreEl: document.getElementById("score-count"),
+      bestEl: document.getElementById("best-count"),
       x: -40,
       speed: 3.1,
       targetMin: 210,
       targetMax: 315,
-      zoneActive: false
+      zoneActive: false,
+      score: 0,
+      best: 0
     };
 
     function updateBattingStatus(message, type) {
@@ -1291,6 +1350,11 @@ python -m http.server 8000</pre>
       batting.status.className = "status";
       if (type) batting.status.classList.add(type);
       batting.status.innerHTML = "<strong>" + message + "</strong>";
+    }
+
+    function updateScoreboard() {
+      if (batting.scoreEl) batting.scoreEl.textContent = String(batting.score);
+      if (batting.bestEl) batting.bestEl.textContent = String(batting.best);
     }
 
     function resetBattingGame() {
@@ -1305,9 +1369,11 @@ python -m http.server 8000</pre>
 
     if (batting.ball && batting.bat && batting.swingBtn && batting.resetBtn) {
       var swingLocked = false;
+
       function tickBatting() {
         batting.x += batting.speed;
-        if (batting.x > 440) {
+
+        if (batting.x > 430) {
           batting.x = -40;
           batting.zoneActive = false;
           if (!swingLocked) {
@@ -1320,12 +1386,15 @@ python -m http.server 8000</pre>
         batting.ball.style.top = (135 + arc) + "px";
 
         batting.zoneActive = batting.x > batting.targetMin && batting.x < batting.targetMax;
-        if (batting.zoneActive && !swingLocked) {
-          updateBattingStatus("Swing now!", "good");
-        }
 
-        if (!batting.zoneActive && !swingLocked && batting.x > 0 && batting.x < 180) {
-          updateBattingStatus("Wait for the pitch.", "");
+        if (!swingLocked) {
+          if (batting.x < 180) {
+            updateBattingStatus("The pitch is coming.", "");
+          } else if (batting.zoneActive) {
+            updateBattingStatus("Swing now!", "good");
+          } else if (batting.x >= batting.targetMax) {
+            updateBattingStatus("Too late! The pitch is past the bat.", "bad");
+          }
         }
 
         requestAnimationFrame(tickBatting);
@@ -1340,6 +1409,9 @@ python -m http.server 8000</pre>
 
         if (batting.zoneActive) {
           swingLocked = true;
+          batting.score += 1;
+          batting.best = Math.max(batting.best, batting.score);
+          updateScoreboard();
           updateBattingStatus("HOME RUN! Perfect timing!", "hero");
           setTimeout(function () {
             batting.x = -40;
@@ -1361,9 +1433,13 @@ python -m http.server 8000</pre>
 
       batting.resetBtn.addEventListener("click", function () {
         swingLocked = false;
+        batting.score = 0;
+        batting.best = 0;
+        updateScoreboard();
         resetBattingGame();
       });
 
+      updateScoreboard();
       resetBattingGame();
       requestAnimationFrame(tickBatting);
     }
