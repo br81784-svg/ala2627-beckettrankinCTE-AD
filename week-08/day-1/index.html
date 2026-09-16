@@ -484,34 +484,129 @@
 
     .baseball-card .scoreboard {
       position: absolute;
-      top: 12px;
+      top: 14px;
       left: 14px;
-      display: flex;
-      align-items: center;
-      gap: .45rem;
-      padding: .5rem .75rem;
-      border-radius: 999px;
-      background: rgba(5, 9, 13, .7);
-      border: 1px solid rgba(255, 255, 255, .12);
+      right: 14px;
+      z-index: 5;
+      display: grid;
+      gap: .5rem;
+      padding: .7rem .8rem .6rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(14, 25, 35, .96), rgba(8, 13, 18, .9));
+      border: 1px solid rgba(153, 213, 255, .28);
+      box-shadow: 0 12px 24px rgba(2, 7, 12, .5), inset 0 0 18px rgba(110, 190, 255, .14);
       font: 700 .72rem/1 var(--ss-mono, ui-monospace, monospace);
-      letter-spacing: .08em;
+      letter-spacing: .12em;
       text-transform: uppercase;
       color: #dfe7ff;
-      z-index: 5
+      overflow: hidden
     }
 
-    .baseball-card .scoreboard span {
-      opacity: .8
+    .baseball-card .scoreboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .08), transparent 26%, transparent 70%, rgba(255, 255, 255, .04));
+      pointer-events: none
     }
 
-    .baseball-card .scoreboard strong {
+    .baseball-card .scoreboard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      position: relative;
+      z-index: 1
+    }
+
+    .baseball-card .scoreboard-top .team {
+      opacity: .88;
+      color: #e7f6ff
+    }
+
+    .baseball-card .scoreboard-top .inning {
+      padding: .28rem .5rem;
+      border-radius: 999px;
+      background: rgba(13, 67, 98, .7);
+      border: 1px solid rgba(154, 223, 255, .22);
+      color: #9be4ff;
+      animation: inningBlink 1.4s ease-in-out infinite alternate
+    }
+
+    .baseball-card .scoreboard-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .45rem
+    }
+
+    .baseball-card .digit-box {
+      display: grid;
+      place-items: center;
+      gap: .22rem;
+      padding: .38rem .2rem .3rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .22);
+      border: 1px solid rgba(160, 201, 248, .12)
+    }
+
+    .baseball-card .digit-box .label {
+      font-size: .55rem;
+      opacity: .8;
+      letter-spacing: .14em
+    }
+
+    .baseball-card .digit-box strong {
       display: inline-grid;
       place-items: center;
-      width: 1.7rem;
-      height: 1.7rem;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .06);
-      color: #f4f7ff
+      min-width: 2.1rem;
+      min-height: 1.8rem;
+      padding: .15rem .35rem;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #0a1b2b, #061017);
+      border: 1px solid rgba(121, 212, 255, .18);
+      color: #d4f7ff;
+      text-shadow: 0 0 10px rgba(98, 211, 255, .75);
+      box-shadow: inset 0 0 8px rgba(95, 219, 255, .16)
+    }
+
+    .baseball-card .digit-box strong.change {
+      animation: scorePulse .5s ease
+    }
+
+    .baseball-card .digit-box.inning-box strong {
+      color: #fff2b1;
+      text-shadow: 0 0 10px rgba(255, 207, 63, .72)
+    }
+
+    @keyframes scorePulse {
+      0% {
+        transform: scale(1);
+        box-shadow: inset 0 0 8px rgba(95, 219, 255, .16);
+      }
+
+      35% {
+        transform: scale(1.08);
+        box-shadow: inset 0 0 14px rgba(95, 219, 255, .4), 0 0 18px rgba(95, 219, 255, .4);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: inset 0 0 8px rgba(95, 219, 255, .16);
+      }
+    }
+
+    @keyframes inningBlink {
+      from {
+        opacity: .74;
+        transform: scale(1);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1.04);
+      }
     }
 
     .baseball-card .field {
@@ -1026,9 +1121,18 @@
         <div class="field-shell">
           <div class="diamond-scene">
             <div class="scoreboard" aria-live="polite">
-              <span>R</span><strong id="runs">3</strong>
-              <span>H</span><strong id="hits">5</strong>
-              <span>O</span><strong id="outs">2</strong>
+              <div class="scoreboard-top">
+                <span class="team">LIONS</span>
+                <span class="inning" id="inning-label">7TH</span>
+                <span class="team">BEARS</span>
+              </div>
+              <div class="scoreboard-grid">
+                <div class="digit-box"><span class="label">R</span><strong id="runs" class="digit">3</strong></div>
+                <div class="digit-box"><span class="label">H</span><strong id="hits" class="digit">5</strong></div>
+                <div class="digit-box"><span class="label">E</span><strong id="outs" class="digit">2</strong></div>
+                <div class="digit-box inning-box"><span class="label">INN</span><strong id="inning"
+                    class="digit">7</strong></div>
+              </div>
             </div>
             <div class="field" id="field">
               <div class="grass"></div>
@@ -1309,18 +1413,36 @@ python -m http.server 8000</pre>
       runs: 3,
       hits: 5,
       outs: 2,
+      inning: 7,
       field: document.getElementById("field"),
       runsEl: document.getElementById("runs"),
       hitsEl: document.getElementById("hits"),
       outsEl: document.getElementById("outs"),
+      inningEl: document.getElementById("inning"),
+      inningLabelEl: document.getElementById("inning-label"),
       note: document.getElementById("field-note")
     };
 
+    function animateDigit(el, value) {
+      if (!el) return;
+      var oldValue = el.textContent.trim();
+      el.textContent = String(value);
+      if (oldValue !== String(value)) {
+        el.classList.remove("change");
+        void el.offsetWidth;
+        el.classList.add("change");
+      }
+    }
+
     function updateBaseballScores() {
       if (!baseball.runsEl) return;
-      baseball.runsEl.textContent = String(baseball.runs);
-      baseball.hitsEl.textContent = String(baseball.hits);
-      baseball.outsEl.textContent = String(baseball.outs);
+      animateDigit(baseball.runsEl, baseball.runs);
+      animateDigit(baseball.hitsEl, baseball.hits);
+      animateDigit(baseball.outsEl, baseball.outs);
+      animateDigit(baseball.inningEl, baseball.inning);
+      if (baseball.inningLabelEl) {
+        baseball.inningLabelEl.textContent = baseball.inning + (baseball.inning === 7 ? "TH" : "TH");
+      }
     }
 
     function setBaseballState(message, className) {
@@ -1337,6 +1459,7 @@ python -m http.server 8000</pre>
         if (roll < 0.3) {
           baseball.runs += 1;
           baseball.hits += 1;
+          baseball.inning = Math.min(baseball.inning + 1, 9);
           setBaseballState("A drive to the gap! The crowd gets on its feet.", "hit");
         } else if (roll < 0.7) {
           baseball.hits += 1;
@@ -1352,6 +1475,7 @@ python -m http.server 8000</pre>
         baseball.runs = 3;
         baseball.hits = 5;
         baseball.outs = 2;
+        baseball.inning = 7;
         baseball.field.classList.remove("hit", "out");
         baseball.note.textContent = "A clean inning is always a good one.";
         updateBaseballScores();
