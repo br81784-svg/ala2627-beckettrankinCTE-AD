@@ -551,11 +551,121 @@
       z-index: 1
     }
 
+    .batting-game .crowd {
+      position: absolute;
+      inset: 54px 8% 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      opacity: .48;
+      z-index: 1;
+      pointer-events: none
+    }
+
+    .batting-game .fan {
+      position: relative;
+      width: 28px;
+      height: 76px;
+      color: #f5c842;
+      transform: scale(var(--fan-scale, 1));
+      transform-origin: bottom center
+    }
+
+    .batting-game .fan:nth-child(even) {
+      color: #65d6e8;
+      --fan-scale: .82
+    }
+
+    .batting-game .fan:nth-child(3n) {
+      color: #ff7890;
+      --fan-scale: 1.12
+    }
+
+    .batting-game .fan::before {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 0;
+      width: 11px;
+      height: 11px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      box-sizing: border-box
+    }
+
+    .batting-game .fan::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 13px;
+      width: 3px;
+      height: 34px;
+      background: currentColor;
+      box-shadow: -11px 34px 0 -1px currentColor, 11px 34px 0 -1px currentColor;
+      transform-origin: top center
+    }
+
+    .batting-game .fan-arms {
+      position: absolute;
+      left: 13px;
+      top: 16px;
+      width: 3px;
+      height: 28px;
+      background: currentColor;
+      transform: rotate(90deg);
+      transform-origin: top center
+    }
+
+    .batting-game .fan-arms::before,
+    .batting-game .fan-arms::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 3px;
+      height: 20px;
+      background: currentColor;
+      transform-origin: top center
+    }
+
+    .batting-game .fan-arms::before {
+      transform: rotate(42deg);
+    }
+
+    .batting-game .fan-arms::after {
+      transform: rotate(-42deg);
+    }
+
+    .batting-game .bat-scene.cheering .crowd {
+      opacity: .9
+    }
+
+    .batting-game .bat-scene.cheering .fan-arms {
+      animation: armsUp .45s ease-in-out infinite alternate
+    }
+
+    .batting-game .bat-scene.cheering .fan:nth-child(2n) .fan-arms {
+      animation-delay: .12s
+    }
+
+    .batting-game .bat-scene.cheering .fan:nth-child(3n) .fan-arms {
+      animation-delay: .24s
+    }
+
+    @keyframes armsUp {
+      from {
+        transform: rotate(75deg);
+      }
+
+      to {
+        transform: rotate(105deg) translateY(-5px);
+      }
+    }
+
     .batting-game .pitch-zone {
       position: absolute;
       left: 52%;
       top: 52%;
-      width: 120px;
+      width: 28px;
       height: 18px;
       border-radius: 999px;
       transform: translate(-50%, -50%);
@@ -625,34 +735,9 @@
       pointer-events: none
     }
 
-    .batting-game .crowd-cheer span {
-      display: inline-block;
-      font-size: 1.45rem;
-      animation: cheerJump .7s ease-in-out infinite alternate;
-      filter: drop-shadow(0 0 12px rgba(255, 211, 88, .7))
-    }
-
-    .batting-game .crowd-cheer span:nth-child(2) {
-      animation-delay: .2s
-    }
-
-    .batting-game .crowd-cheer span:nth-child(3) {
-      animation-delay: .4s
-    }
-
     .batting-game .bat-scene.cheering .crowd-cheer {
       opacity: 1;
       transform: translateX(-50%) translateY(-4px)
-    }
-
-    @keyframes cheerJump {
-      from {
-        transform: translateY(0) scale(1);
-      }
-
-      to {
-        transform: translateY(-8px) scale(1.18);
-      }
     }
 
     .batting-game .bat::before {
@@ -1083,12 +1168,18 @@
             <div class="score-chip"><span>Best</span><strong id="best-count">0</strong></div>
           </div>
           <div class="field-top"></div>
+          <div class="crowd" aria-hidden="true">
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+            <span class="fan"><span class="fan-arms"></span></span>
+          </div>
           <div class="pitch-zone" aria-hidden="true"></div>
           <div class="ball" id="pitch-ball" aria-label="Baseball"></div>
           <div class="bat" id="wood-bat" aria-label="Wood baseball bat"></div>
-          <div class="crowd-cheer" aria-hidden="true">
-            <span>🎉</span><span>🙌</span><span>🔥</span>
-          </div>
         </div>
         <div class="controls">
           <button class="demo" id="swing-btn" type="button">Swing</button>
@@ -1385,8 +1476,8 @@ python -m http.server 8000</pre>
       bestEl: document.getElementById("best-count"),
       x: -40,
       speed: 3.1,
-      targetMin: 300,
-      targetMax: 360,
+      targetMin: 328,
+      targetMax: 342,
       zoneActive: false,
       score: 0,
       best: 0
