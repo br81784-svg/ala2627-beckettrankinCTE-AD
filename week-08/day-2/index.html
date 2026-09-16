@@ -805,6 +805,243 @@
       color: #ffd75d
     }
 
+    /* ── hurdle race ───────────────────────────────────────────────────────── */
+    .hurdle-game {
+      --track-red: #b92d38;
+      --track-dark: #641d2b;
+      --lane-line: rgba(255, 236, 216, .65)
+    }
+
+    .hurdle-game h2 {
+      margin: .3rem 0 .9rem;
+      font-family: var(--ss-display, "Syne", system-ui, sans-serif);
+      font-size: clamp(1.35rem, 2vw, 1.9rem);
+      line-height: 1.1
+    }
+
+    .hurdle-game .race-track {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #efc08d 0 22%, var(--track-dark) 22% 100%);
+      box-shadow: inset 0 0 28px rgba(35, 8, 18, .35), 0 0 28px rgba(148, 34, 50, .2)
+    }
+
+    .hurdle-game .race-track::before {
+      content: "";
+      position: absolute;
+      inset: 67px 0 0;
+      background: repeating-linear-gradient(180deg, var(--track-red) 0 40px, var(--track-dark) 40px 44px);
+      opacity: .95
+    }
+
+    .hurdle-game .race-sign {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      z-index: 4;
+      padding: .38rem .55rem;
+      border: 1px solid rgba(92, 37, 28, .32);
+      border-radius: 7px;
+      background: rgba(255, 239, 199, .78);
+      color: #57242a;
+      font: 800 .62rem/1 var(--ss-mono, ui-monospace, monospace);
+      letter-spacing: .08em;
+      text-transform: uppercase
+    }
+
+    .hurdle-game .lane-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--lane-line);
+      z-index: 1
+    }
+
+    .hurdle-game .lane-line.one {
+      top: 128px
+    }
+
+    .hurdle-game .lane-line.two {
+      top: 190px
+    }
+
+    .hurdle-game .lane-line.three {
+      top: 252px
+    }
+
+    .hurdle-game .hurdles {
+      position: absolute;
+      inset: 79px 0 0;
+      z-index: 3;
+      pointer-events: none
+    }
+
+    .hurdle-game .hurdle {
+      position: absolute;
+      top: 0;
+      width: 24px;
+      height: 178px;
+      border-left: 4px solid #f6dfbc;
+      border-right: 4px solid #f6dfbc;
+      border-top: 5px solid #f6dfbc;
+      filter: drop-shadow(0 3px 2px rgba(36, 7, 15, .35))
+    }
+
+    .hurdle-game .hurdle::after {
+      content: "";
+      position: absolute;
+      left: -7px;
+      right: -7px;
+      bottom: -4px;
+      height: 4px;
+      background: #f6dfbc;
+      box-shadow: 2px 0 0 #8d2630
+    }
+
+    .hurdle-game .hurdle:nth-child(1) {
+      left: 17%
+    }
+
+    .hurdle-game .hurdle:nth-child(2) {
+      left: 32%
+    }
+
+    .hurdle-game .hurdle:nth-child(3) {
+      left: 47%
+    }
+
+    .hurdle-game .hurdle:nth-child(4) {
+      left: 62%
+    }
+
+    .hurdle-game .hurdle:nth-child(5) {
+      left: 77%
+    }
+
+    .hurdle-game .runner {
+      position: absolute;
+      left: 4%;
+      z-index: 5;
+      width: 22px;
+      height: 48px;
+      color: var(--runner-color, #ffe2b8);
+      transition: left .08s linear
+    }
+
+    .hurdle-game .runner::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      width: 11px;
+      height: 11px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      box-sizing: border-box
+    }
+
+    .hurdle-game .runner::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+      width: 3px;
+      height: 25px;
+      background: currentColor;
+      box-shadow: -10px 25px 0 -1px currentColor, 10px 25px 0 -1px currentColor;
+      transform-origin: top center;
+      animation: runnerStride .38s ease-in-out infinite alternate
+    }
+
+    .hurdle-game .runner .arms {
+      position: absolute;
+      left: 10px;
+      top: 16px;
+      width: 3px;
+      height: 22px;
+      background: currentColor;
+      transform: rotate(55deg);
+      transform-origin: top center;
+      animation: runnerArms .38s ease-in-out infinite alternate
+    }
+
+    .hurdle-game .runner.jumping {
+      transform: translateY(-34px) scale(1.04);
+      transition: transform .25s ease-in-out
+    }
+
+    .hurdle-game #runner-player {
+      top: 91px;
+      --runner-color: #ffe3bc
+    }
+
+    .hurdle-game #runner-blue {
+      top: 133px;
+      --runner-color: #6de2db
+    }
+
+    .hurdle-game #runner-gold {
+      top: 195px;
+      --runner-color: #ffd55d
+    }
+
+    .hurdle-game #runner-purple {
+      top: 257px;
+      --runner-color: #c8b6ff
+    }
+
+    @keyframes runnerStride {
+      from {
+        transform: rotate(24deg);
+      }
+
+      to {
+        transform: rotate(-24deg);
+      }
+    }
+
+    @keyframes runnerArms {
+      from {
+        transform: rotate(28deg);
+      }
+
+      to {
+        transform: rotate(112deg);
+      }
+    }
+
+    .hurdle-game .race-score {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      z-index: 6;
+      padding: .4rem .55rem;
+      border-radius: 7px;
+      background: rgba(70, 17, 27, .82);
+      color: #fff1dc;
+      font: 800 .64rem/1 var(--ss-mono, ui-monospace, monospace);
+      letter-spacing: .08em;
+      text-transform: uppercase
+    }
+
+    .hurdle-game .status {
+      margin-top: .9rem;
+      padding: .75rem .9rem;
+      border-radius: 10px;
+      background: rgba(3, 7, 12, .42);
+      border: 1px solid rgba(255, 255, 255, .09);
+      font-size: .9rem;
+      color: #dfe7ff
+    }
+
+    .hurdle-game .status strong {
+      color: #ffe29a
+    }
+
     /* ── modal ──────────────────────────────────────────────────────────────── */
     dialog {
       border: none;
@@ -1159,33 +1396,29 @@
         <p class="hint">Pick an event and what it does, then use the button. The code underneath is exactly what goes in
           script.js — and it changes when you change the choices.</p>
       </section>
-      <section class="tl batting-game w4" aria-labelledby="batting-title">
+      <section class="tl hurdle-game w4" aria-labelledby="race-title">
         <span class="k">Game challenge</span>
-        <h2 id="batting-title">Time the swing</h2>
-        <div class="bat-scene" aria-live="polite">
-          <div class="scoreboard">
-            <div class="score-chip"><span>Score</span><strong id="score-count">0</strong></div>
-            <div class="score-chip"><span>Best</span><strong id="best-count">0</strong></div>
+        <h2 id="race-title">Hurdle dash</h2>
+        <div class="race-track" id="race-track" aria-live="polite">
+          <div class="race-sign">5 hurdles</div>
+          <div class="race-score" id="race-score">Hurdle 0 / 5</div>
+          <div class="lane-line one"></div>
+          <div class="lane-line two"></div>
+          <div class="lane-line three"></div>
+          <div class="hurdles" aria-hidden="true">
+            <span class="hurdle"></span><span class="hurdle"></span><span class="hurdle"></span>
+            <span class="hurdle"></span><span class="hurdle"></span>
           </div>
-          <div class="field-top"></div>
-          <div class="crowd" aria-hidden="true">
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-            <span class="fan"><span class="fan-arms"></span></span>
-          </div>
-          <div class="pitch-zone" aria-hidden="true"></div>
-          <div class="ball" id="pitch-ball" aria-label="Baseball"></div>
-          <div class="bat" id="wood-bat" aria-label="Wood baseball bat"></div>
+          <div class="runner" id="runner-player" aria-label="Your stick figure runner"><span class="arms"></span></div>
+          <div class="runner" id="runner-blue" aria-label="Blue competitor"><span class="arms"></span></div>
+          <div class="runner" id="runner-gold" aria-label="Gold competitor"><span class="arms"></span></div>
+          <div class="runner" id="runner-purple" aria-label="Purple competitor"><span class="arms"></span></div>
         </div>
         <div class="controls">
-          <button class="demo" id="swing-btn" type="button">Swing</button>
-          <button class="b alt" id="reset-btn" type="button">Reset</button>
+          <button class="demo" id="jump-btn" type="button">Jump hurdle</button>
+          <button class="b alt" id="race-reset" type="button">Restart race</button>
         </div>
-        <div class="status" id="game-status"><strong>Wait for the pitch.</strong></div>
+        <div class="status" id="race-status"><strong>Press Jump hurdle when you reach each hurdle.</strong></div>
       </section>
       <section class="tl">
         <span class="k">You have met it when</span>
@@ -1466,136 +1699,97 @@ python -m http.server 8000</pre>
       });
     }
 
-    var batting = {
-      ball: document.getElementById("pitch-ball"),
-      bat: document.getElementById("wood-bat"),
-      status: document.getElementById("game-status"),
-      swingBtn: document.getElementById("swing-btn"),
-      resetBtn: document.getElementById("reset-btn"),
-      scoreEl: document.getElementById("score-count"),
-      bestEl: document.getElementById("best-count"),
-      x: -40,
-      speed: 3.1,
-      targetMin: 328,
-      targetMax: 342,
-      zoneActive: false,
-      score: 0,
-      best: 0
+    var race = {
+      track: document.getElementById("race-track"),
+      player: document.getElementById("runner-player"),
+      jumpBtn: document.getElementById("jump-btn"),
+      resetBtn: document.getElementById("race-reset"),
+      score: document.getElementById("race-score"),
+      status: document.getElementById("race-status"),
+      runners: [
+        document.getElementById("runner-player"),
+        document.getElementById("runner-blue"),
+        document.getElementById("runner-gold"),
+        document.getElementById("runner-purple")
+      ],
+      x: 4,
+      speed: .055,
+      hurdleCount: 0,
+      jumping: false,
+      finished: false
     };
 
-    function setCrowdCheer(active) {
-      var scene = document.querySelector(".bat-scene");
-      if (!scene) return;
-      scene.classList.toggle("cheering", active);
+    function updateRaceStatus(message) {
+      if (race.status) race.status.innerHTML = "<strong>" + message + "</strong>";
     }
 
-    function updateBattingStatus(message, type) {
-      if (!batting.status) return;
-      batting.status.className = "status";
-      if (type) batting.status.classList.add(type);
-      batting.status.innerHTML = "<strong>" + message + "</strong>";
+    function updateRaceScore() {
+      if (race.score) race.score.textContent = "Hurdle " + race.hurdleCount + " / 5";
     }
 
-    function updateScoreboard() {
-      if (batting.scoreEl) batting.scoreEl.textContent = String(batting.score);
-      if (batting.bestEl) batting.bestEl.textContent = String(batting.best);
+    function resetRace() {
+      race.x = 4;
+      race.hurdleCount = 0;
+      race.jumping = false;
+      race.finished = false;
+      race.player.classList.remove("jumping");
+      race.runners.forEach(function (runner, index) {
+        runner.style.left = (index === 0 ? 4 : 4 + index * 1.2) + "%";
+      });
+      updateRaceScore();
+      updateRaceStatus("Press Jump hurdle when you reach each hurdle.");
     }
 
-    function resetBattingGame() {
-      if (!batting.ball || !batting.bat) return;
-      batting.x = -40;
-      batting.ball.style.left = "-40px";
-      batting.ball.style.top = "135px";
-      batting.bat.classList.remove("swinging");
-      batting.bat.style.left = "52%";
-      batting.zoneActive = false;
-      setCrowdCheer(false);
-      updateBattingStatus("Wait for the pitch.", "");
+    function jump() {
+      if (race.jumping || race.finished) return;
+      race.jumping = true;
+      race.player.classList.add("jumping");
+      setTimeout(function () {
+        race.jumping = false;
+        race.player.classList.remove("jumping");
+      }, 500);
     }
 
-    if (batting.ball && batting.bat && batting.swingBtn && batting.resetBtn) {
-      var swingLocked = false;
+    if (race.track && race.player && race.jumpBtn && race.resetBtn) {
+      function tickRace() {
+        if (!race.finished) {
+          race.x += race.speed;
+          race.player.style.left = race.x + "%";
+          race.runners.slice(1).forEach(function (runner, index) {
+            var competitorX = race.x + (index + 1) * 4 - Math.sin(race.x / 9 + index) * 3;
+            runner.style.left = Math.min(94, competitorX) + "%";
+          });
 
-      function tickBatting() {
-        batting.x += batting.speed;
+          var nextHurdle = Math.floor((race.x - 17) / 15) + 1;
+          if (nextHurdle > race.hurdleCount && nextHurdle <= 5) {
+            if (!race.jumping) {
+              race.finished = true;
+              updateRaceStatus("You clipped a hurdle! Press Restart race to try again.");
+            } else {
+              race.hurdleCount = nextHurdle;
+              updateRaceScore();
+              updateRaceStatus(nextHurdle === 5 ? "Final hurdle cleared! Sprint to the finish!" : "Nice jump! Get ready for the next hurdle.");
+            }
+          }
 
-        if (batting.x > 430) {
-          batting.x = -40;
-          batting.zoneActive = false;
-          if (!swingLocked) {
-            updateBattingStatus("Missed it! The pitch sailed by.", "bad");
+          if (race.x >= 94 && race.hurdleCount === 5) {
+            race.finished = true;
+            updateRaceStatus("You won the hurdle dash! The crowd is cheering!");
           }
         }
-
-        var arc = Math.sin((batting.x + 30) / 24) * 18;
-        batting.ball.style.left = batting.x + "px";
-        batting.ball.style.top = (135 + arc) + "px";
-
-        batting.zoneActive = batting.x > batting.targetMin && batting.x < batting.targetMax;
-
-        if (!swingLocked) {
-          if (batting.x < 180) {
-            updateBattingStatus("The pitch is coming.", "");
-          } else if (batting.zoneActive) {
-            updateBattingStatus("Swing now!", "good");
-          } else if (batting.x >= batting.targetMax) {
-            updateBattingStatus("Too late! The pitch is past the bat.", "bad");
-          }
-        }
-
-        if (batting.x >= batting.targetMin && batting.x <= batting.targetMax) {
-          batting.bat.style.left = "52%";
-        } else {
-          batting.bat.style.left = "52%";
-        }
-
-        requestAnimationFrame(tickBatting);
+        requestAnimationFrame(tickRace);
       }
 
-      batting.swingBtn.addEventListener("click", function () {
-        if (swingLocked) return;
-        batting.bat.classList.remove("swinging");
-        void batting.bat.offsetWidth;
-        batting.bat.classList.add("swinging");
-        setTimeout(function () { batting.bat.classList.remove("swinging"); }, 180);
-
-        if (batting.zoneActive) {
-          swingLocked = true;
-          batting.score += 1;
-          batting.best = Math.max(batting.best, batting.score);
-          updateScoreboard();
-          setCrowdCheer(true);
-          updateBattingStatus("HOME RUN! Perfect timing!", "hero");
-          setTimeout(function () {
-            batting.x = -40;
-            batting.zoneActive = false;
-            swingLocked = false;
-            setCrowdCheer(false);
-            updateBattingStatus("Fresh pitch. Get ready.", "");
-          }, 1200);
-        } else {
-          swingLocked = true;
-          updateBattingStatus("Too early or too late. Missed it.", "bad");
-          setTimeout(function () {
-            batting.x = -40;
-            batting.zoneActive = false;
-            swingLocked = false;
-            updateBattingStatus("Fresh pitch. Get ready.", "");
-          }, 950);
+      race.jumpBtn.addEventListener("click", jump);
+      race.resetBtn.addEventListener("click", resetRace);
+      document.addEventListener("keydown", function (event) {
+        if (event.code === "Space") {
+          event.preventDefault();
+          jump();
         }
       });
-
-      batting.resetBtn.addEventListener("click", function () {
-        swingLocked = false;
-        batting.score = 0;
-        batting.best = 0;
-        updateScoreboard();
-        resetBattingGame();
-      });
-
-      updateScoreboard();
-      resetBattingGame();
-      requestAnimationFrame(tickBatting);
+      resetRace();
+      requestAnimationFrame(tickRace);
     }
 
     if (document.querySelector('[data-lab="state"]')) {
