@@ -553,7 +553,7 @@
 
     .batting-game .pitch-zone {
       position: absolute;
-      left: 56%;
+      left: 52%;
       top: 52%;
       width: 120px;
       height: 18px;
@@ -598,7 +598,7 @@
 
     .batting-game .bat {
       position: absolute;
-      left: 56%;
+      left: 52%;
       right: auto;
       bottom: 48px;
       width: 170px;
@@ -610,6 +610,49 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, .28), inset 0 0 0 2px rgba(80, 44, 17, .5);
       z-index: 6;
       transition: transform .14s ease
+    }
+
+    .batting-game .crowd-cheer {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: .5rem;
+      opacity: 0;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 8;
+      pointer-events: none
+    }
+
+    .batting-game .crowd-cheer span {
+      display: inline-block;
+      font-size: 1.45rem;
+      animation: cheerJump .7s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 12px rgba(255, 211, 88, .7))
+    }
+
+    .batting-game .crowd-cheer span:nth-child(2) {
+      animation-delay: .2s
+    }
+
+    .batting-game .crowd-cheer span:nth-child(3) {
+      animation-delay: .4s
+    }
+
+    .batting-game .bat-scene.cheering .crowd-cheer {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px)
+    }
+
+    @keyframes cheerJump {
+      from {
+        transform: translateY(0) scale(1);
+      }
+
+      to {
+        transform: translateY(-8px) scale(1.18);
+      }
     }
 
     .batting-game .bat::before {
@@ -1043,6 +1086,9 @@
           <div class="pitch-zone" aria-hidden="true"></div>
           <div class="ball" id="pitch-ball" aria-label="Baseball"></div>
           <div class="bat" id="wood-bat" aria-label="Wood baseball bat"></div>
+          <div class="crowd-cheer" aria-hidden="true">
+            <span>🎉</span><span>🙌</span><span>🔥</span>
+          </div>
         </div>
         <div class="controls">
           <button class="demo" id="swing-btn" type="button">Swing</button>
@@ -1339,12 +1385,18 @@ python -m http.server 8000</pre>
       bestEl: document.getElementById("best-count"),
       x: -40,
       speed: 3.1,
-      targetMin: 230,
-      targetMax: 330,
+      targetMin: 300,
+      targetMax: 360,
       zoneActive: false,
       score: 0,
       best: 0
     };
+
+    function setCrowdCheer(active) {
+      var scene = document.querySelector(".bat-scene");
+      if (!scene) return;
+      scene.classList.toggle("cheering", active);
+    }
 
     function updateBattingStatus(message, type) {
       if (!batting.status) return;
@@ -1364,7 +1416,9 @@ python -m http.server 8000</pre>
       batting.ball.style.left = "-40px";
       batting.ball.style.top = "135px";
       batting.bat.classList.remove("swinging");
+      batting.bat.style.left = "52%";
       batting.zoneActive = false;
+      setCrowdCheer(false);
       updateBattingStatus("Wait for the pitch.", "");
     }
 
@@ -1399,9 +1453,9 @@ python -m http.server 8000</pre>
         }
 
         if (batting.x >= batting.targetMin && batting.x <= batting.targetMax) {
-          batting.bat.style.left = "54%";
+          batting.bat.style.left = "52%";
         } else {
-          batting.bat.style.left = "56%";
+          batting.bat.style.left = "52%";
         }
 
         requestAnimationFrame(tickBatting);
@@ -1419,11 +1473,13 @@ python -m http.server 8000</pre>
           batting.score += 1;
           batting.best = Math.max(batting.best, batting.score);
           updateScoreboard();
+          setCrowdCheer(true);
           updateBattingStatus("HOME RUN! Perfect timing!", "hero");
           setTimeout(function () {
             batting.x = -40;
             batting.zoneActive = false;
             swingLocked = false;
+            setCrowdCheer(false);
             updateBattingStatus("Fresh pitch. Get ready.", "");
           }, 1200);
         } else {
