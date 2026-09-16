@@ -598,8 +598,9 @@
 
     .batting-game .bat {
       position: absolute;
-      right: 38px;
-      bottom: 42px;
+      left: 56%;
+      right: auto;
+      bottom: 48px;
       width: 170px;
       height: 18px;
       border-radius: 12px;
@@ -1338,8 +1339,8 @@ python -m http.server 8000</pre>
       bestEl: document.getElementById("best-count"),
       x: -40,
       speed: 3.1,
-      targetMin: 210,
-      targetMax: 315,
+      targetMin: 230,
+      targetMax: 330,
       zoneActive: false,
       score: 0,
       best: 0
@@ -1395,6 +1396,12 @@ python -m http.server 8000</pre>
           } else if (batting.x >= batting.targetMax) {
             updateBattingStatus("Too late! The pitch is past the bat.", "bad");
           }
+        }
+
+        if (batting.x >= batting.targetMin && batting.x <= batting.targetMax) {
+          batting.bat.style.left = "54%";
+        } else {
+          batting.bat.style.left = "56%";
         }
 
         requestAnimationFrame(tickBatting);
