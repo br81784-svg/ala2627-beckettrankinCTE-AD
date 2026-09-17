@@ -200,12 +200,16 @@
       opacity: 0
     }
 
-    .field.hit .crowd {
+    .field.homer .crowd {
       animation: crowd-cheer .7s ease-in-out 2
     }
 
-    .field.hit .crowd:after {
+    .field.homer .crowd:after {
       animation: cheer-sign 1.25s ease forwards
+    }
+
+    .field.homer .crowd:after {
+      content: "TRY HARDER!   TRY HARDER!   TRY HARDER!"
     }
 
     @keyframes crowd-cheer {
@@ -266,6 +270,24 @@
       border: 2px solid #ad8c6a;
       transform: rotate(45deg);
       box-shadow: 2px 2px 0 #7f604b
+    }
+
+    .base.occupied {
+      background: var(--gold);
+      border-color: #fff2bd;
+      box-shadow: 0 0 0 4px #f1bd5466, 2px 2px 0 #7f604b
+    }
+
+    .base.occupied:after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #19384b;
+      transform: translate(-50%, -50%) rotate(-45deg)
     }
 
     .first-base {
@@ -527,6 +549,18 @@
       animation: home-run 1.25s cubic-bezier(.18, .7, .3, 1) forwards
     }
 
+    .field.hit.single .ball {
+      animation: base-hit 1.05s ease-out forwards
+    }
+
+    .field.hit.double .ball {
+      animation: double-hit 1.1s ease-out forwards
+    }
+
+    .field.hit.triple .ball {
+      animation: triple-hit 1.15s ease-out forwards
+    }
+
     .field.hit .batter {
       animation: none
     }
@@ -568,6 +602,42 @@
         left: 94%;
         bottom: 91%;
         transform: scale(.45)
+      }
+    }
+
+    @keyframes base-hit {
+      to {
+        left: 80%;
+        bottom: 34%;
+        transform: scale(.7)
+      }
+    }
+
+    @keyframes double-hit {
+      55% {
+        left: 78%;
+        bottom: 58%;
+        transform: scale(.75)
+      }
+
+      100% {
+        left: 86%;
+        bottom: 50%;
+        transform: scale(.62)
+      }
+    }
+
+    @keyframes triple-hit {
+      55% {
+        left: 75%;
+        bottom: 69%;
+        transform: scale(.7)
+      }
+
+      100% {
+        left: 90%;
+        bottom: 76%;
+        transform: scale(.5)
       }
     }
 
@@ -736,12 +806,13 @@
     </header>
     <section class="hero">
       <h1>The Ace</h1>
-      <p>Choose your pitch. The pitcher delivers, the batter has a 10% chance to make contact, and the count never lies.
+      <p>Choose your pitch. The pitcher delivers, the batter has a 25% chance to make contact, and the count never lies.
       </p>
     </section>
     <section class="board">
       <section><span>Home</span><b id="home">00</b></section>
-      <section class="count"><span>Count</span><b><span id="balls">0</span> - <span id="strikes">0</span></b></section>
+      <section class="count"><span>Count</span><b><span id="balls">0</span> - <span id="strikes">0</span></b><small
+          class="outs">0 OUTS</small></section>
       <section><span>Away</span><b id="away">00</b></section>
     </section>
     <section class="field" id="field" aria-label="Baseball field with pitcher, batter, catcher, and umpire">
@@ -749,9 +820,9 @@
       <div class="fence"></div>
       <div class="mound"></div>
       <div class="plate" aria-label="home plate"></div>
-      <div class="base first-base" aria-label="first base"></div>
-      <div class="base second-base" aria-label="second base"></div>
-      <div class="base third-base" aria-label="third base"></div>
+      <div class="base first-base" id="firstBase" aria-label="first base"></div>
+      <div class="base second-base" id="secondBase" aria-label="second base"></div>
+      <div class="base third-base" id="thirdBase" aria-label="third base"></div>
       <div class="fielder left-field" aria-label="left fielder"></div>
       <div class="fielder center-field" aria-label="center fielder"></div>
       <div class="fielder right-field" aria-label="right fielder"></div>
@@ -778,7 +849,121 @@
     </section>
   </main>
   <script>
-    (function () { var field = document.getElementById("field"), result = document.getElementById("result"), buttons = document.querySelectorAll(".pitch"), balls = document.getElementById("balls"), strikes = document.getElementById("strikes"), home = document.getElementById("home"), away = document.getElementById("away"), ballCount = 0, strikeCount = 0, homeScore = 0, awayScore = 0, locked = false; function resetCount() { ballCount = 0; strikeCount = 0; balls.textContent = "0"; strikes.textContent = "0" } function setButtons(value) { buttons.forEach(function (button) { button.disabled = value }) } buttons.forEach(function (button) { button.addEventListener("click", function () { if (locked) return; locked = true; setButtons(true); var pitch = button.dataset.pitch; var hit = Math.random() < .1; field.className = "field " + (hit ? "hit" : "throwing"); result.className = "result"; if (hit) { homeScore++; home.textContent = String(homeScore).padStart(2, "0"); result.className = "result hit"; result.textContent = "Crack of the bat! The ball clears the fence and the crowd erupts!"; resetCount() } else { strikeCount++; strikes.textContent = strikeCount; result.className = "result strike"; result.textContent = pitch + "! Strike " + strikeCount + "."; if (strikeCount === 3) { awayScore++; away.textContent = String(awayScore).padStart(2, "0"); result.textContent = "Strike three! The batter is out."; resetCount() } } setTimeout(function () { field.className = "field"; locked = false; setButtons(false) }, 1450) }) }) }());
+    (function () {
+      var field = document.getElementById("field");
+      var result = document.getElementById("result");
+      var buttons = document.querySelectorAll(".pitch");
+      var balls = document.getElementById("balls");
+      var strikes = document.getElementById("strikes");
+      var outs = document.querySelector(".outs");
+      var home = document.getElementById("home");
+      var away = document.getElementById("away");
+      var baseElements = [document.getElementById("firstBase"), document.getElementById("secondBase"), document.getElementById("thirdBase")];
+      var runners = [false, false, false];
+      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false;
+
+      function resetCount() {
+        ballCount = 0;
+        strikeCount = 0;
+        balls.textContent = "0";
+        strikes.textContent = "0";
+      }
+
+      function drawBases() {
+        baseElements.forEach(function (base, index) {
+          base.classList.toggle("occupied", runners[index]);
+        });
+      }
+
+      function resetInning() {
+        runners = [false, false, false];
+        outCount = 0;
+        outs.textContent = "0 OUTS";
+        resetCount();
+        drawBases();
+      }
+
+      function setButtons(value) {
+        buttons.forEach(function (button) { button.disabled = value; });
+      }
+
+      function scoreRuns(number) {
+        homeScore += number;
+        home.textContent = String(homeScore).padStart(2, "0");
+      }
+
+      function advanceRunners(hitType) {
+        var next = [false, false, false];
+        var runs = 0;
+        if (hitType === "single") {
+          if (runners[2]) runs++;
+          next[2] = runners[1];
+          next[1] = runners[0];
+          next[0] = true;
+        }
+        if (hitType === "double") {
+          runs = (runners[1] ? 1 : 0) + (runners[2] ? 1 : 0);
+          next[2] = runners[0];
+          next[1] = true;
+        }
+        if (hitType === "triple") {
+          runs = runners.filter(Boolean).length;
+          next[2] = true;
+        }
+        if (hitType === "homer") {
+          runs = runners.filter(Boolean).length + 1;
+        }
+        scoreRuns(runs);
+        runners = next;
+        drawBases();
+      }
+
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          if (locked) return;
+          locked = true;
+          setButtons(true);
+          var pitch = button.dataset.pitch;
+          var hit = Math.random() < .25;
+          var hitType = "";
+          if (hit) {
+            var distance = Math.random();
+            hitType = distance < .5 ? "single" : distance < .75 ? "double" : distance < .9 ? "triple" : "homer";
+          }
+          field.className = "field " + (hit ? "hit " + hitType : "throwing");
+          result.className = "result";
+          if (hit) {
+            advanceRunners(hitType);
+            resetCount();
+            result.className = "result hit";
+            result.textContent = hitType === "homer" ? "Home run! The crowd shouts: Try harder!" : "A " + hitType + " puts runners on base.";
+          } else {
+            strikeCount++;
+            strikes.textContent = strikeCount;
+            result.className = "result strike";
+            result.textContent = pitch + "! Strike " + strikeCount + ".";
+            if (strikeCount === 3) {
+              outCount++;
+              outs.textContent = outCount + (outCount === 1 ? " OUT" : " OUTS");
+              resetCount();
+              if (outCount === 3) {
+                awayScore++;
+                away.textContent = String(awayScore).padStart(2, "0");
+                result.textContent = "Three outs. The inning resets.";
+                resetInning();
+              } else {
+                result.textContent = "Strike three! Out " + outCount + ".";
+              }
+            }
+          }
+          setTimeout(function () {
+            field.className = "field";
+            locked = false;
+            setButtons(false);
+          }, hitType === "homer" ? 1450 : 1250);
+        });
+      });
+    }());
   </script>
 </body>
 
