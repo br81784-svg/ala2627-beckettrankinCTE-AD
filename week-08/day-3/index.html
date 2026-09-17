@@ -126,6 +126,30 @@
       box-shadow: inset 0 -35px 50px #234b3844
     }
 
+    .fence {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 10%;
+      height: 27%;
+      border: 6px solid #284b59;
+      border-bottom: 0;
+      border-radius: 50% 50% 0 0 / 35% 35% 0 0;
+      box-shadow: inset 0 12px 0 #d6c78133;
+      opacity: .9
+    }
+
+    .fence:after {
+      content: "OUTFIELD FENCE";
+      position: absolute;
+      left: 50%;
+      top: 18%;
+      transform: translateX(-50%);
+      color: #d9e2d2;
+      font: 700 .58rem Arial, sans-serif;
+      letter-spacing: .16em
+    }
+
     .field:before {
       content: "";
       position: absolute;
@@ -149,6 +173,80 @@
       border-radius: 50%;
       transform: translateX(-50%);
       box-shadow: 0 9px 0 #875841
+    }
+
+    .plate {
+      position: absolute;
+      right: 15%;
+      bottom: 9%;
+      width: 34px;
+      height: 27px;
+      background: #f5ead0;
+      clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+      box-shadow: 0 3px 0 #a98564
+    }
+
+    .base {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #f5ead0;
+      border: 2px solid #ad8c6a;
+      transform: rotate(45deg);
+      box-shadow: 2px 2px 0 #7f604b
+    }
+
+    .first-base {
+      right: 27%;
+      bottom: 20%
+    }
+
+    .second-base {
+      right: 43%;
+      bottom: 35%
+    }
+
+    .third-base {
+      right: 59%;
+      bottom: 20%
+    }
+
+    .fielder {
+      position: absolute;
+      width: 28px;
+      height: 58px;
+      border-radius: 45% 45% 15% 15%;
+      background: #315d4e;
+      border: 3px solid #183e3f;
+      box-shadow: 0 4px 0 #244837;
+      transform: scale(.75)
+    }
+
+    .fielder:before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: -17px;
+      width: 13px;
+      height: 13px;
+      border: 3px solid #183e3f;
+      border-radius: 50%;
+      background: #315d4e
+    }
+
+    .left-field {
+      left: 22%;
+      top: 28%
+    }
+
+    .center-field {
+      left: 43%;
+      top: 21%
+    }
+
+    .right-field {
+      right: 20%;
+      top: 28%
     }
 
     .pitcher,
@@ -250,12 +348,13 @@
     }
 
     .batter .bat {
-      left: 8px;
-      top: 31px;
+      left: 2px;
+      top: 48px;
       width: 7px;
-      height: 98px;
+      height: 82px;
       background: #754a32;
-      transform: rotate(-31deg);
+      transform: rotate(-48deg);
+      transform-origin: bottom center;
       border-radius: 5px
     }
 
@@ -293,14 +392,15 @@
 
     .ball {
       position: absolute;
-      left: 50%;
-      bottom: 56%;
-      width: 12px;
-      height: 12px;
+      left: calc(50% + 20px);
+      bottom: calc(50% + 51px);
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #fff;
       box-shadow: 0 1px 4px #162a2d;
-      opacity: 0
+      opacity: 0;
+      pointer-events: none
     }
 
     .field.throwing .ball {
@@ -324,8 +424,8 @@
 
     @keyframes throw {
       to {
-        left: 83%;
-        bottom: 18%;
+        left: 84%;
+        bottom: 13%;
         transform: scale(.7)
       }
     }
@@ -498,7 +598,15 @@
       <section><span>Away</span><b id="away">00</b></section>
     </section>
     <section class="field" id="field" aria-label="Baseball field with pitcher, batter, catcher, and umpire">
+      <div class="fence"></div>
       <div class="mound"></div>
+      <div class="plate" aria-label="home plate"></div>
+      <div class="base first-base" aria-label="first base"></div>
+      <div class="base second-base" aria-label="second base"></div>
+      <div class="base third-base" aria-label="third base"></div>
+      <div class="fielder left-field" aria-label="left fielder"></div>
+      <div class="fielder center-field" aria-label="center fielder"></div>
+      <div class="fielder right-field" aria-label="right fielder"></div>
       <div class="ball"></div>
       <div class="person pitcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
           class="leg"></i><i class="leg two"></i><span class="role">Pitcher</span></div>
