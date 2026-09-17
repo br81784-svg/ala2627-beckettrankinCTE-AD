@@ -4,15 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Centerline | Archer timing game</title>
+  <title>The Ace | Baseball game</title>
   <style>
     :root {
-      --ink: #14212d;
-      --cream: #f7f0df;
-      --paper: #fffaf0;
-      --red: #c65345;
-      --gold: #f4bd54;
-      --line: #d6c7ad
+      --navy: #12243a;
+      --blue: #21496a;
+      --red: #c8483f;
+      --cream: #f5f0e5;
+      --white: #fffdf7;
+      --gold: #f1bd54;
+      --grass: #4e805d;
+      --dirt: #b77950
     }
 
     * {
@@ -21,516 +23,515 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       background: var(--cream);
-      color: var(--ink);
-      font: 16px/1.5 Georgia, serif
-    }
-
-    button {
-      font: inherit
+      color: var(--navy);
+      font: 16px/1.4 Georgia, serif
     }
 
     .page {
-      width: min(1120px, calc(100% - 32px));
+      width: min(1100px, calc(100% - 30px));
       margin: auto;
-      padding: 28px 0 42px
+      padding: 25px 0 42px
     }
 
-    .topbar {
+    .top {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 16px
+      align-items: center;
+      border-bottom: 1px solid #cfc4b1;
+      padding-bottom: 15px
     }
 
-    .brand {
-      font: bold .8rem Arial, sans-serif;
+    .logo {
+      font: bold .82rem Arial, sans-serif;
       letter-spacing: .18em;
       text-transform: uppercase
     }
 
-    .brand span {
-      color: var(--red)
+    .logo i {
+      color: var(--red);
+      font-style: normal
     }
 
-    .round {
-      font: 700 .75rem Arial, sans-serif;
-      letter-spacing: .1em;
+    .gameinfo {
+      font: 700 .7rem Arial, sans-serif;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      color: #6c7a79
+      color: #69766f
     }
 
-    .intro {
-      display: grid;
-      grid-template-columns: 1fr 1.05fr;
-      gap: 7vw;
-      align-items: end;
-      padding: clamp(48px, 9vw, 100px) 0 34px
-    }
-
-    h1 {
-      font-size: clamp(3.2rem, 8vw, 7.6rem);
-      line-height: .82;
-      letter-spacing: -.07em;
-      font-weight: 400;
-      margin: 0 0 25px
-    }
-
-    .lead {
-      font-size: clamp(1rem, 1.7vw, 1.25rem);
-      max-width: 390px;
-      margin: 0;
-      color: #51605e
-    }
-
-    .instruction {
-      border-left: 3px solid var(--red);
-      padding-left: 24px;
-      max-width: 400px;
-      margin-left: auto
-    }
-
-    .instruction strong {
-      font-size: 1.35rem;
-      font-weight: 400;
-      display: block;
-      margin-bottom: 8px
-    }
-
-    .instruction p {
-      margin: 0;
-      color: #68736d
-    }
-
-    .game {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      box-shadow: 0 18px 45px #5743281f;
-      padding: clamp(16px, 3vw, 30px)
-    }
-
-    .gamebar {
+    .hero {
       display: flex;
       justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 18px
+      gap: 30px;
+      align-items: end;
+      padding: 50px 0 28px
     }
 
-    .gamebar h2 {
-      font-size: 1.55rem;
+    .hero h1 {
+      font-size: clamp(3.7rem, 10vw, 8rem);
+      line-height: .78;
+      letter-spacing: -.08em;
       font-weight: 400;
       margin: 0
     }
 
-    .gamebar p {
-      margin: 3px 0 0;
-      color: #758078;
-      font-size: .9rem
+    .hero p {
+      max-width: 310px;
+      margin: 0;
+      color: #65736f
     }
 
-    .stats {
-      display: flex;
-      gap: 24px;
-      text-align: right;
-      font: 700 .68rem Arial, sans-serif;
-      letter-spacing: .12em;
+    .board {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      gap: 1px;
+      background: var(--navy);
+      border: 4px solid var(--navy);
+      color: white;
+      font: 700 .8rem Arial, sans-serif;
       text-transform: uppercase;
-      color: #89918b
+      letter-spacing: .1em
     }
 
-    .stats b {
+    .board section {
+      background: #1c3852;
+      padding: 14px 17px
+    }
+
+    .board b {
       display: block;
-      color: var(--ink);
-      font-size: 1.25rem;
+      font-size: 2rem;
       letter-spacing: 0;
+      color: var(--gold);
       margin-top: 4px
     }
 
-    .range {
+    .board .count {
+      background: #0c1c30
+    }
+
+    .count b {
+      font-size: 1.25rem;
+      color: #fff
+    }
+
+    .field {
       position: relative;
-      height: clamp(280px, 43vw, 460px);
+      height: clamp(330px, 47vw, 500px);
+      margin-top: 22px;
       overflow: hidden;
-      border: 1px solid #b5c2b6;
-      background: linear-gradient(#a9c9c3 0 56%, #d7c79c 56% 60%, #7e9d78 60%)
+      border: 2px solid #315b68;
+      background: linear-gradient(#86bdca 0 46%, #d5bd83 46% 57%, var(--grass) 57%);
+      box-shadow: inset 0 -35px 50px #234b3844
     }
 
-    .range:before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 40%;
-      height: 20%;
-      background: linear-gradient(165deg, transparent 48%, #3259444d 49% 51%, transparent 52%), linear-gradient(15deg, transparent 48%, #32594438 49% 51%, transparent 52%)
-    }
-
-    .sun {
-      position: absolute;
-      right: 10%;
-      top: 10%;
-      width: clamp(45px, 7vw, 72px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: #f4c966;
-      box-shadow: 0 0 0 12px #f4c9662e
-    }
-
-    .target {
-      position: absolute;
-      right: 10%;
-      top: 27%;
-      width: clamp(86px, 13vw, 132px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: radial-gradient(circle, #f8f3df 0 17%, var(--red) 18% 35%, #f6d47b 36% 55%, #47817e 56% 75%, #f8f3df 76%);
-      border: 5px solid #f5ead1;
-      box-shadow: 0 3px 0 #385b54, 0 10px 16px #52645c66
-    }
-
-    .target:after {
+    .field:before {
       content: "";
       position: absolute;
       left: 50%;
-      top: 100%;
-      width: 5px;
-      height: 140px;
+      bottom: -46%;
+      width: 75%;
+      aspect-ratio: 1;
+      border: 3px solid #f2d59d;
+      border-radius: 50%;
       transform: translateX(-50%);
-      background: #79533c
+      opacity: .8
     }
 
-    .target.hit {
-      animation: shake .45s ease
-    }
-
-    .target.bull {
-      box-shadow: 0 0 0 7px var(--gold), 0 0 28px var(--gold)
-    }
-
-    @keyframes shake {
-      35% {
-        transform: translateX(4px)
-      }
-
-      70% {
-        transform: translateX(-4px)
-      }
-    }
-
-    .archer {
-      position: absolute;
-      left: 11%;
-      bottom: 15%;
-      width: 116px;
-      height: 175px;
-      color: #263e48;
-      z-index: 2
-    }
-
-    .archer i {
-      position: absolute;
-      display: block;
-      background: currentColor;
-      border-radius: 8px
-    }
-
-    .head {
-      left: 47px;
-      top: 0;
-      width: 30px;
-      height: 30px;
-      border: 4px solid currentColor;
-      background: transparent !important;
-      border-radius: 50% !important
-    }
-
-    .torso {
-      left: 59px;
-      top: 29px;
-      width: 6px;
-      height: 79px;
-      transform: rotate(-5deg)
-    }
-
-    .arm {
-      left: 61px;
-      top: 38px;
-      width: 5px;
-      height: 61px;
-      transform: rotate(-68deg);
-      transform-origin: top
-    }
-
-    .arm.two {
-      transform: rotate(48deg)
-    }
-
-    .leg {
-      left: 60px;
-      top: 104px;
-      width: 6px;
-      height: 72px;
-      transform: rotate(22deg);
-      transform-origin: top
-    }
-
-    .leg.two {
-      transform: rotate(-21deg)
-    }
-
-    .bow {
-      left: 27px;
-      top: 25px;
-      width: 58px;
-      height: 126px;
-      border-right: 3px solid #774e35;
-      border-radius: 50%;
-      transform: rotate(-6deg)
-    }
-
-    .bow:after {
-      content: "";
-      position: absolute;
-      right: -2px;
-      top: -1px;
-      height: 128px;
-      width: 2px;
-      background: #f1dfb4;
-      transform: rotate(2deg)
-    }
-
-    .arrow {
-      position: absolute;
-      left: calc(11% + 74px);
-      bottom: calc(15% + 115px);
-      width: clamp(125px, 24vw, 300px);
-      height: 4px;
-      background: #f3dfb0;
-      transform-origin: left center;
-      transform: rotate(-5deg);
-      z-index: 3;
-      transition: left 1s ease-out, bottom 1s ease-out, transform 1s ease-out
-    }
-
-    .arrow:after {
-      content: "";
-      position: absolute;
-      right: -2px;
-      top: -6px;
-      border-left: 13px solid #f3dfb0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent
-    }
-
-    .arrow:before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: -8px;
-      width: 16px;
-      height: 16px;
-      border-top: 2px solid #f3dfb0;
-      border-bottom: 2px solid #f3dfb0;
-      transform: skewX(-28deg)
-    }
-
-    .arrow.shot {
-      left: 72%;
-      bottom: calc(26% + 45px);
-      transform: rotate(-4deg)
-    }
-
-    .arrow.wide {
-      transform: rotate(4deg)
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: center;
-      margin-top: 21px
-    }
-
-    .meter-label {
-      display: flex;
-      justify-content: space-between;
-      font: 700 .68rem Arial, sans-serif;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-      color: #758078
-    }
-
-    .meter {
-      position: relative;
-      height: 14px;
-      margin-top: 9px;
-      border-radius: 99px;
-      background: linear-gradient(90deg, var(--red) 0 37%, var(--gold) 37% 63%, var(--red) 63%);
-      box-shadow: inset 0 1px 3px #68503b88
-    }
-
-    .needle {
+    .mound {
       position: absolute;
       left: 50%;
-      top: -7px;
-      width: 4px;
+      bottom: 47%;
+      width: 100px;
       height: 28px;
-      border-radius: 3px;
-      background: #fff;
-      box-shadow: 0 1px 4px #493c30;
+      background: #b47751;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 9px 0 #875841
+    }
+
+    .pitcher,
+    .batter,
+    .catcher,
+    .umpire {
+      position: absolute;
+      color: var(--navy)
+    }
+
+    .pitcher {
+      left: 50%;
+      bottom: 50%;
+      width: 70px;
+      height: 140px;
       transform: translateX(-50%)
     }
 
-    .shoot {
-      min-width: 150px;
-      border: 0;
-      border-radius: 2px;
-      background: var(--red);
-      color: #fff;
-      padding: 14px 22px;
-      font: bold .85rem Arial, sans-serif;
-      letter-spacing: .13em;
+    .batter {
+      right: 17%;
+      bottom: 17%;
+      width: 80px;
+      height: 155px
+    }
+
+    .catcher {
+      left: 13%;
+      bottom: 12%;
+      width: 75px;
+      height: 125px
+    }
+
+    .umpire {
+      left: 5%;
+      bottom: 13%;
+      width: 54px;
+      height: 145px;
+      color: #182a38
+    }
+
+    .person i {
+      position: absolute;
+      display: block
+    }
+
+    .person .head {
+      left: 28px;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border: 4px solid currentColor;
+      border-radius: 50%
+    }
+
+    .person .body {
+      left: 39px;
+      top: 28px;
+      width: 7px;
+      height: 66px;
+      background: currentColor
+    }
+
+    .person .arm {
+      left: 40px;
+      top: 34px;
+      width: 6px;
+      height: 58px;
+      background: currentColor;
+      transform: rotate(48deg);
+      transform-origin: top;
+      border-radius: 5px
+    }
+
+    .person .arm.two {
+      transform: rotate(-48deg)
+    }
+
+    .person .leg {
+      left: 40px;
+      top: 91px;
+      width: 6px;
+      height: 58px;
+      background: currentColor;
+      transform: rotate(25deg);
+      transform-origin: top;
+      border-radius: 5px
+    }
+
+    .person .leg.two {
+      transform: rotate(-25deg)
+    }
+
+    .pitcher .arm {
+      transform: rotate(-70deg)
+    }
+
+    .pitcher .arm.two {
+      transform: rotate(30deg)
+    }
+
+    .batter .bat {
+      left: 8px;
+      top: 31px;
+      width: 7px;
+      height: 98px;
+      background: #754a32;
+      transform: rotate(-31deg);
+      border-radius: 5px
+    }
+
+    .batter .arm {
+      transform: rotate(-65deg)
+    }
+
+    .catcher .mask {
+      left: 18px;
+      top: -2px;
+      width: 48px;
+      height: 39px;
+      border: 3px solid currentColor;
+      border-radius: 45%
+    }
+
+    .catcher .glove {
+      left: 1px;
+      top: 48px;
+      width: 25px;
+      height: 25px;
+      border: 5px solid currentColor;
+      border-radius: 50%
+    }
+
+    .umpire .body {
+      height: 75px
+    }
+
+    .umpire .head {
+      width: 24px;
+      height: 24px;
+      left: 15px
+    }
+
+    .ball {
+      position: absolute;
+      left: 50%;
+      bottom: 56%;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px #162a2d;
+      opacity: 0
+    }
+
+    .field.throwing .ball {
+      opacity: 1;
+      animation: throw 1s ease-in forwards
+    }
+
+    .field.hit .ball {
+      opacity: 1;
+      animation: fly 1s ease-out forwards
+    }
+
+    .field.hit .batter {
+      animation: swing .45s ease
+    }
+
+    .field.out .ball {
+      opacity: 1;
+      animation: throw 1s ease-in forwards
+    }
+
+    @keyframes throw {
+      to {
+        left: 14%;
+        bottom: 18%;
+        transform: scale(.7)
+      }
+    }
+
+    @keyframes fly {
+      to {
+        left: 86%;
+        bottom: 75%;
+        transform: scale(.65)
+      }
+    }
+
+    @keyframes swing {
+      50% {
+        transform: rotate(-18deg)
+      }
+    }
+
+    .role {
+      position: absolute;
+      bottom: 5px;
+      font: 700 .62rem Arial, sans-serif;
+      letter-spacing: .12em;
       text-transform: uppercase;
+      color: #e8e4d5;
+      background: #18384dce;
+      padding: 4px 7px
+    }
+
+    .pitcher .role {
+      left: -10px
+    }
+
+    .batter .role {
+      right: 0
+    }
+
+    .catcher .role {
+      left: -5px
+    }
+
+    .umpire .role {
+      left: -10px
+    }
+
+    .controls {
+      margin-top: 22px;
+      background: var(--white);
+      padding: 19px;
+      border: 1px solid #d5c8b2
+    }
+
+    .controls h2 {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin: 0 0 3px
+    }
+
+    .controls p {
+      margin: 0;
+      color: #68756f;
+      font-size: .9rem
+    }
+
+    .pitches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 11px;
+      margin-top: 16px
+    }
+
+    .pitch {
+      border: 2px solid var(--blue);
+      background: #fff;
+      color: var(--blue);
+      padding: 13px 9px;
       cursor: pointer;
-      box-shadow: 0 4px 0 #873d34
+      font: bold .8rem Arial, sans-serif;
+      letter-spacing: .1em;
+      text-transform: uppercase
     }
 
-    .shoot:hover {
-      background: #a7453b
+    .pitch:hover,
+    .pitch:focus {
+      background: var(--blue);
+      color: #fff
     }
 
-    .shoot:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #873d34
-    }
-
-    .shoot:disabled {
-      opacity: .5;
+    .pitch:disabled {
+      opacity: .45;
       cursor: wait
     }
 
-    .message {
-      min-height: 26px;
-      margin: 13px 0 0;
-      color: #65736b;
-      font-size: 1rem
+    .pitch small {
+      display: block;
+      font: normal .78rem Georgia, serif;
+      letter-spacing: 0;
+      text-transform: none;
+      margin-top: 3px
     }
 
-    .message.good {
+    .result {
+      min-height: 25px;
+      margin: 16px 0 0;
+      font-weight: bold;
+      color: var(--blue)
+    }
+
+    .result.hit {
+      color: #ab453b
+    }
+
+    .result.strike {
       color: #987018
     }
 
-    .message.bad {
-      color: #a8483d
-    }
-
-    .tip {
-      text-align: center;
-      color: #8c948c;
-      font-size: .8rem;
-      margin: 17px 0 0
-    }
-
-    .tip b {
-      color: #68756d
-    }
-
-    @media(max-width:700px) {
-      .intro {
-        grid-template-columns: 1fr;
-        padding-top: 54px
+    @media(max-width:650px) {
+      .hero {
+        display: block;
+        padding-top: 45px
       }
 
-      .instruction {
-        margin: 0;
-        max-width: none
+      .hero p {
+        margin-top: 22px
       }
 
-      .controls {
+      .board {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .board .count {
+        grid-column: span 2
+      }
+
+      .pitches {
         grid-template-columns: 1fr
       }
 
-      .shoot {
-        width: 100%
+      .pitcher {
+        bottom: 50%
       }
 
-      .archer {
-        left: 4%;
+      .batter {
+        right: 7%;
+        transform: scale(.82);
+        transform-origin: bottom right
+      }
+
+      .catcher {
+        left: 7%;
         transform: scale(.82);
         transform-origin: bottom left
       }
 
-      .arrow {
-        left: calc(4% + 60px);
-        width: 40%
-      }
-
-      .arrow.shot {
-        left: 65%
-      }
-
-      .target {
-        right: 5%
+      .umpire {
+        left: 1%;
+        transform: scale(.72);
+        transform-origin: bottom left
       }
     }
-
-    +
   </style>
   +
 </head>
-+
 
 <body>
-  +<main class="page">
-    + <header class="topbar">
-      <div class="brand">Center<span>/</span>line</div>
-      <div class="round">Round <span id="round">01</span></div>
+  <main class="page">
+    <header class="top">
+      <div class="logo">The <i>Ace</i></div>
+      <div class="gameinfo">Exhibition game / bottom of the 9th</div>
     </header>
-    + <section class="intro">
-      <div>
-        <h1>Find<br>the center.</h1>
-        <p class="lead">A small test of timing, patience, and a steady hand.</p>
-      </div>
-      <div class="instruction"><strong>Hold your nerve.</strong>
-        <p>Release the arrow when the needle reaches the gold. Hit the target outside the center and you will have to
-          try again.</p>
-      </div>
+    <section class="hero">
+      <h1>The Ace</h1>
+      <p>Choose your pitch. The pitcher delivers, the batter has a 10% chance to make contact, and the count never lies.
+      </p>
     </section>
-    + <section class="game" aria-label="Archer timing game">
-      + <div class="gamebar">
-        <div>
-          <h2>The morning range</h2>
-          <p>Watch the marker. Take the shot.</p>
-        </div>
-        <div class="stats">
-          <div>Score<b id="score">00</b></div>
-          <div>Best<b id="best">00</b></div>
-        </div>
-      </div>
-      + <div class="range">
-        <div class="sun"></div>
-        <div class="target" id="target"></div>
-        <div class="archer" aria-label="Stick figure archer"><i class="head"></i><i class="torso"></i><i
-            class="arm"></i><i class="arm two"></i><i class="leg"></i><i class="leg two"></i><i class="bow"></i></div>
-        <div class="arrow" id="arrow"></div>
-      </div>
-      + <div class="controls">
-        <div>
-          <div class="meter-label"><span>Draw strength</span><span>Gold = bullseye</span></div>
-          <div class="meter"><i class="needle" id="needle"></i></div>
-        </div><button class="shoot" id="shoot" type="button">Shoot!</button>
-      </div>
-      + <p class="message" id="message" aria-live="polite">The bow is drawn. Wait for the gold zone.</p>
-      <p class="tip">You can shoot once per round. <b>Stay centered.</b></p>
-      +
+    <section class="board">
+      <section><span>Home</span><b id="home">00</b></section>
+      <section class="count"><span>Count</span><b><span id="balls">0</span> - <span id="strikes">0</span></b></section>
+      <section><span>Away</span><b id="away">00</b></section>
     </section>
-    +</main>
-  +
+    <section class="field" id="field" aria-label="Baseball field with pitcher, batter, catcher, and umpire">
+      <div class="mound"></div>
+      <div class="ball"></div>
+      <div class="person pitcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
+          class="leg"></i><i class="leg two"></i><span class="role">Pitcher</span></div>
+      <div class="person batter"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
+          class="leg"></i><i class="leg two"></i><i class="bat"></i><span class="role">Batter</span></div>
+      <div class="person catcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
+          class="leg"></i><i class="leg two"></i><i class="mask"></i><i class="glove"></i><span
+          class="role">Catcher</span></div>
+      <div class="person umpire"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
+          class="leg"></i><i class="leg two"></i><span class="role">Umpire</span></div>
+    </section>
+    <section class="controls">
+      <h2>Call the pitch</h2>
+      <p>What is coming across the plate?</p>
+      <div class="pitches"><button class="pitch" data-pitch="Fastball">Fastball<small>straight and
+            quick</small></button><button class="pitch" data-pitch="Curveball">Curveball<small>breaks
+            late</small></button><button class="pitch" data-pitch="Changeup">Changeup<small>slows the
+            hitter</small></button></div>
+      <p class="result" id="result" aria-live="polite">Select a pitch to begin.</p>
+    </section>
+  </main>
   <script>
-    +(function () { var needle = document.getElementById("needle"), shoot = document.getElementById("shoot"), arrow = document.getElementById("arrow"), target = document.getElementById("target"), message = document.getElementById("message"), score = document.getElementById("score"), best = document.getElementById("best"), round = document.getElementById("round"); var position = 50, direction = 1, playing = true, currentScore = 0, bestScore = 0, roundNumber = 1; function move() { if (!playing) return; position += direction * 1.25; if (position > 96 || position < 4) direction *= -1; needle.style.left = position + "%"; requestAnimationFrame(move) } function reset() { position = Math.random() * 72 + 14; direction = Math.random() > .5 ? 1 : -1; playing = true; shoot.disabled = false; arrow.className = "arrow"; target.className = "target"; message.className = "message"; message.textContent = "The bow is drawn. Wait for the gold zone."; requestAnimationFrame(move) } shoot.addEventListener("click", function () { if (!playing) return; playing = false; shoot.disabled = true; var bullseye = Math.abs(position - 50) <= 13; arrow.className = "arrow shot" + (bullseye ? "" : " wide"); target.className = "target hit" + (bullseye ? " bull" : ""); if (bullseye) { currentScore++; score.textContent = String(currentScore).padStart(2, "0"); if (currentScore > bestScore) { bestScore = currentScore; best.textContent = String(bestScore).padStart(2, "0") } message.className = "message good"; message.textContent = "Bullseye. Your timing was exact." } else { currentScore = 0; score.textContent = "00"; message.className = "message bad"; message.textContent = "You hit the target, but missed the bullseye." } setTimeout(function () { roundNumber++; round.textContent = String(roundNumber).padStart(2, "0"); reset() }, 1450) }); reset() }());
-    +</script>
+    (function () { var field = document.getElementById("field"), result = document.getElementById("result"), buttons = document.querySelectorAll(".pitch"), balls = document.getElementById("balls"), strikes = document.getElementById("strikes"), home = document.getElementById("home"), away = document.getElementById("away"), ballCount = 0, strikeCount = 0, homeScore = 0, awayScore = 0, locked = false; function resetCount() { ballCount = 0; strikeCount = 0; balls.textContent = "0"; strikes.textContent = "0" } function setButtons(value) { buttons.forEach(function (button) { button.disabled = value }) } buttons.forEach(function (button) { button.addEventListener("click", function () { if (locked) return; locked = true; setButtons(true); var pitch = button.dataset.pitch; var hit = Math.random() < .1; field.className = "field " + (hit ? "hit" : "throwing"); result.className = "result"; if (hit) { homeScore++; home.textContent = String(homeScore).padStart(2, "0"); result.className = "result hit"; result.textContent = "Crack of the bat! The batter got a hit on your " + pitch + "."; resetCount() } else { strikeCount++; strikes.textContent = strikeCount; result.className = "result strike"; result.textContent = pitch + "! Strike " + strikeCount + "."; if (strikeCount === 3) { awayScore++; away.textContent = String(awayScore).padStart(2, "0"); result.textContent = "Strike three! The batter is out."; resetCount() } } setTimeout(function () { field.className = "field out"; locked = false; setButtons(false) }, 1250) }) }) }());
+  </script>
   +
 </body>
 +
