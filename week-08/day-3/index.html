@@ -168,21 +168,21 @@
     }
 
     .batter {
-      right: 17%;
+      right: 20%;
       bottom: 17%;
       width: 80px;
       height: 155px
     }
 
     .catcher {
-      left: 13%;
+      right: 7%;
       bottom: 12%;
       width: 75px;
       height: 125px
     }
 
     .umpire {
-      left: 5%;
+      right: 1%;
       bottom: 13%;
       width: 54px;
       height: 145px;
@@ -310,7 +310,7 @@
 
     .field.hit .ball {
       opacity: 1;
-      animation: fly 1s ease-out forwards
+      animation: throw 1s ease-in forwards
     }
 
     .field.hit .batter {
@@ -324,17 +324,9 @@
 
     @keyframes throw {
       to {
-        left: 14%;
+        left: 83%;
         bottom: 18%;
         transform: scale(.7)
-      }
-    }
-
-    @keyframes fly {
-      to {
-        left: 86%;
-        bottom: 75%;
-        transform: scale(.65)
       }
     }
 
@@ -475,19 +467,18 @@
       }
 
       .catcher {
-        left: 7%;
+        right: 8%;
         transform: scale(.82);
-        transform-origin: bottom left
+        transform-origin: bottom right
       }
 
       .umpire {
-        left: 1%;
+        right: 1%;
         transform: scale(.72);
-        transform-origin: bottom left
+        transform-origin: bottom right
       }
     }
   </style>
-  +
 </head>
 
 <body>
@@ -530,10 +521,8 @@
     </section>
   </main>
   <script>
-    (function () { var field = document.getElementById("field"), result = document.getElementById("result"), buttons = document.querySelectorAll(".pitch"), balls = document.getElementById("balls"), strikes = document.getElementById("strikes"), home = document.getElementById("home"), away = document.getElementById("away"), ballCount = 0, strikeCount = 0, homeScore = 0, awayScore = 0, locked = false; function resetCount() { ballCount = 0; strikeCount = 0; balls.textContent = "0"; strikes.textContent = "0" } function setButtons(value) { buttons.forEach(function (button) { button.disabled = value }) } buttons.forEach(function (button) { button.addEventListener("click", function () { if (locked) return; locked = true; setButtons(true); var pitch = button.dataset.pitch; var hit = Math.random() < .1; field.className = "field " + (hit ? "hit" : "throwing"); result.className = "result"; if (hit) { homeScore++; home.textContent = String(homeScore).padStart(2, "0"); result.className = "result hit"; result.textContent = "Crack of the bat! The batter got a hit on your " + pitch + "."; resetCount() } else { strikeCount++; strikes.textContent = strikeCount; result.className = "result strike"; result.textContent = pitch + "! Strike " + strikeCount + "."; if (strikeCount === 3) { awayScore++; away.textContent = String(awayScore).padStart(2, "0"); result.textContent = "Strike three! The batter is out."; resetCount() } } setTimeout(function () { field.className = "field out"; locked = false; setButtons(false) }, 1250) }) }) }());
+    (function () { var field = document.getElementById("field"), result = document.getElementById("result"), buttons = document.querySelectorAll(".pitch"), balls = document.getElementById("balls"), strikes = document.getElementById("strikes"), home = document.getElementById("home"), away = document.getElementById("away"), ballCount = 0, strikeCount = 0, homeScore = 0, awayScore = 0, locked = false; function resetCount() { ballCount = 0; strikeCount = 0; balls.textContent = "0"; strikes.textContent = "0" } function setButtons(value) { buttons.forEach(function (button) { button.disabled = value }) } buttons.forEach(function (button) { button.addEventListener("click", function () { if (locked) return; locked = true; setButtons(true); var pitch = button.dataset.pitch; var hit = Math.random() < .1; field.className = "field " + (hit ? "hit" : "throwing"); result.className = "result"; if (hit) { homeScore++; home.textContent = String(homeScore).padStart(2, "0"); result.className = "result hit"; result.textContent = "Crack of the bat! The batter got a hit on your " + pitch + "."; resetCount() } else { strikeCount++; strikes.textContent = strikeCount; result.className = "result strike"; result.textContent = pitch + "! Strike " + strikeCount + "."; if (strikeCount === 3) { awayScore++; away.textContent = String(awayScore).padStart(2, "0"); result.textContent = "Strike three! The batter is out."; resetCount() } } setTimeout(function () { field.className = "field"; locked = false; setButtons(false) }, 1250) }) }) }());
   </script>
-  +
 </body>
-+
 
 </html>
