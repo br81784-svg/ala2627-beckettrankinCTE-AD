@@ -253,7 +253,7 @@
 
     .plate {
       position: absolute;
-      right: 15%;
+      right: 13%;
       bottom: 9%;
       width: 34px;
       height: 27px;
@@ -281,28 +281,85 @@
     .base.occupied:after {
       content: "";
       position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 11px;
-      height: 11px;
+      left: 7px;
+      top: 3px;
+      width: 7px;
+      height: 12px;
+      border-radius: 5px 5px 2px 2px;
+      background: #1d5263;
+      transform: rotate(-45deg)
+    }
+
+    .base.occupied:before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: -7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: #19384b;
-      transform: translate(-50%, -50%) rotate(-45deg)
+      background: #ba7656;
+      border: 1px solid #19384b;
+      transform: rotate(-45deg)
     }
 
     .first-base {
-      right: 27%;
+      right: 29%;
       bottom: 20%
     }
 
     .second-base {
-      right: 43%;
+      right: 45%;
       bottom: 35%
     }
 
     .third-base {
-      right: 59%;
+      right: 61%;
       bottom: 20%
+    }
+
+    .infielder {
+      position: absolute;
+      width: 22px;
+      height: 44px;
+      border-radius: 45% 45% 15% 15%;
+      background: linear-gradient(90deg, #173f50, #34706b 48%, #173c4d);
+      border: 2px solid #163847;
+      box-shadow: 0 4px 0 #203f39, 0 8px 7px #193b3544;
+      transform: scale(.72);
+      z-index: 2
+    }
+
+    .infielder:before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: -13px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #163847;
+      border-radius: 50%;
+      background: #ba7656
+    }
+
+    .first-baseman {
+      right: 29%;
+      bottom: 29%
+    }
+
+    .second-baseman {
+      right: 39%;
+      bottom: 42%
+    }
+
+    .shortstop {
+      right: 53%;
+      bottom: 39%
+    }
+
+    .third-baseman {
+      right: 61%;
+      bottom: 29%
     }
 
     .fielder {
@@ -826,6 +883,10 @@
       <div class="fielder left-field" aria-label="left fielder"></div>
       <div class="fielder center-field" aria-label="center fielder"></div>
       <div class="fielder right-field" aria-label="right fielder"></div>
+      <div class="infielder first-baseman" aria-label="first baseman"></div>
+      <div class="infielder second-baseman" aria-label="second baseman"></div>
+      <div class="infielder shortstop" aria-label="shortstop"></div>
+      <div class="infielder third-baseman" aria-label="third baseman"></div>
       <div class="ball"></div>
       <div class="person pitcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
           class="leg"></i><i class="leg two"></i><span class="role">Pitcher</span></div>
