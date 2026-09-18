@@ -599,8 +599,8 @@
 
     .ball {
       position: absolute;
-      left: calc(50% + 20px);
-      bottom: calc(50% + 51px);
+      left: calc(50% - 4px);
+      bottom: calc(41% + 70px);
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -665,8 +665,8 @@
 
     @keyframes throw {
       to {
-        left: 84%;
-        bottom: 13%;
+        left: calc(50% - 4px);
+        bottom: calc(9% + 10px);
         transform: scale(.7)
       }
     }
@@ -1035,7 +1035,6 @@
           if (locked) return;
           locked = true;
           setButtons(true);
-          switchBatterBox();
           var pitch = button.dataset.pitch;
           var hit = Math.random() < .15;
           var hitType = "";
@@ -1050,6 +1049,7 @@
             resetCount();
             result.className = "result hit";
             result.textContent = hitType === "homer" ? "Home run! The crowd shouts: Try harder!" : "A " + hitType + " puts runners on base.";
+            switchBatterBox();
           } else {
             strikeCount++;
             strikes.textContent = strikeCount;
@@ -1059,6 +1059,7 @@
               outCount++;
               outs.textContent = outCount + (outCount === 1 ? " OUT" : " OUTS");
               resetCount();
+              switchBatterBox();
               if (outCount === 3) {
                 awayScore++;
                 away.textContent = String(awayScore).padStart(2, "0");
