@@ -655,12 +655,12 @@
 
     .field.hitting-pitch .ball {
       opacity: 1;
-      animation: hitting-pitch var(--pitch-speed, 1s) linear forwards
+      animation: hitting-pitch var(--pitch-speed, 1s) linear both
     }
 
     .field.pitching-mode.pitching-pitch .ball {
       opacity: 1;
-      animation: pitching-pitch var(--pitch-speed, 1s) linear forwards
+      animation: pitching-pitch var(--pitch-speed, 1s) linear both
     }
 
     .field.hit .ball {
@@ -1232,7 +1232,7 @@
             var distance = Math.random();
             hitType = distance < .5 ? "single" : distance < .75 ? "double" : distance < .9 ? "triple" : "homer";
           }
-          field.className = "field " + (hittingMode ? "" : "pitching-mode pitching-pitch ") + (hit ? "hit " + hitType : "missed");
+          field.className = "field " + (hit ? (hittingMode ? "hit " + hitType : "pitching-mode pitching-pitch hit " + hitType) : (hittingMode ? "hitting-pitch" : "pitching-mode pitching-pitch"));
           result.className = "result";
           if (hit) {
             advanceRunners(hitType);
