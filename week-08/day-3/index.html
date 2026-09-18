@@ -658,6 +658,11 @@
       animation: hitting-pitch var(--pitch-speed, 1s) linear forwards
     }
 
+    .field.pitching-mode.pitching-pitch .ball {
+      opacity: 1;
+      animation: pitching-pitch var(--pitch-speed, 1s) linear forwards
+    }
+
     .field.hit .ball {
       opacity: 1;
       animation: home-run 1.25s cubic-bezier(.18, .7, .3, 1) forwards
@@ -705,6 +710,20 @@
     }
 
     @keyframes hitting-pitch {
+      0% {
+        left: calc(50% - 4px);
+        bottom: calc(41% + 70px);
+        transform: scale(1.1)
+      }
+
+      100% {
+        left: calc(50% - 4px);
+        bottom: calc(9% + 10px);
+        transform: scale(.7)
+      }
+    }
+
+    @keyframes pitching-pitch {
       0% {
         left: calc(50% - 4px);
         bottom: calc(41% + 70px);
@@ -1201,6 +1220,10 @@
           var pitch = hittingMode ? currentPitch.name : button.dataset.pitch;
           var timing = hittingMode ? performance.now() - pitchStartedAt : 0;
           var hit = hittingMode ? timing >= currentPitch.window[0] && timing <= currentPitch.window[1] : Math.random() < .1;
+          var selectedPitch = pitchTypes.find(function (pitchType) { return pitchType.name === pitch; });
+          if (!hittingMode && selectedPitch) {
+            field.style.setProperty("--pitch-speed", selectedPitch.duration + "ms");
+          }
           pitchInFlight = false;
           pitchStartedAt = 0;
           currentPitch = null;
@@ -1209,7 +1232,7 @@
             var distance = Math.random();
             hitType = distance < .5 ? "single" : distance < .75 ? "double" : distance < .9 ? "triple" : "homer";
           }
-          field.className = "field " + (hittingMode ? "" : "pitching-mode ") + (hit ? "hit " + hitType : "missed");
+          field.className = "field " + (hittingMode ? "" : "pitching-mode pitching-pitch ") + (hit ? "hit " + hitType : "missed");
           result.className = "result";
           if (hit) {
             advanceRunners(hitType);
