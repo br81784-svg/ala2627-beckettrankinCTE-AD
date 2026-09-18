@@ -118,10 +118,12 @@
 
     .field {
       position: relative;
-      height: clamp(330px, 47vw, 500px);
+      height: clamp(410px, 58vw, 650px);
       margin-top: 22px;
       --base-offset: 18%;
       overflow: hidden;
+      perspective: 900px;
+      transform-style: preserve-3d;
       border: 2px solid #315b68;
       background: linear-gradient(#86bdca 0 39%, #d5bd83 39% 44%, #477854 44% 100%);
       box-shadow: inset 0 -35px 50px #234b3844
@@ -136,7 +138,7 @@
       aspect-ratio: 1;
       background: linear-gradient(135deg, #b77c52, #a96748);
       border: 3px solid #d5a36d;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateZ(-35px);
       box-shadow: inset 0 0 0 14px #a96d4b;
       opacity: .94;
       z-index: 0
@@ -155,8 +157,23 @@
       border: 8px solid #284b59;
       border-bottom: 0;
       border-radius: 50% 50% 0 0 / 35% 35% 0 0;
+      clip-path: polygon(0 100%, 0 28%, 10% 20%, 21% 25%, 32% 17%, 44% 23%, 56% 15%, 68% 24%, 80% 18%, 91% 25%, 100% 16%, 100% 100%);
       box-shadow: inset 0 12px 0 #d6c78133, 0 7px 0 #183b45;
+      transform: translateZ(-65px) rotateX(7deg);
+      transform-origin: bottom center;
       opacity: .9
+    }
+
+    .fence:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 17%;
+      height: 12px;
+      background: #396775;
+      clip-path: polygon(0 45%, 10% 0, 21% 38%, 32% 0, 44% 34%, 56% 0, 68% 40%, 80% 0, 91% 38%, 100% 0, 100% 100%, 0 100%);
+      opacity: .85
     }
 
     .fence:after {
@@ -185,7 +202,9 @@
         radial-gradient(circle at 78% 46%, #e5be62 0 3px, #183a4c 4px 8px, transparent 9px),
         radial-gradient(circle at 91% 70%, #e8d6ad 0 3px, #244153 4px 8px, transparent 9px);
       opacity: .92;
-      z-index: 1
+      z-index: 1;
+      transform: translateZ(-85px) rotateX(8deg);
+      transform-origin: bottom center
     }
 
     .crowd:after {
@@ -348,7 +367,7 @@
       background: linear-gradient(90deg, #173f50, #34706b 48%, #173c4d);
       border: 2px solid #163847;
       box-shadow: 0 4px 0 #203f39, 0 8px 7px #193b3544;
-      transform: scale(.72);
+      transform: translateZ(-22px) scale(.72);
       z-index: 2
     }
 
@@ -392,7 +411,8 @@
       background: linear-gradient(90deg, #214e4b, #3d7a5c 48%, #1d4948);
       border: 3px solid #183e3f;
       box-shadow: 0 4px 0 #244837, 0 10px 8px #193b3544;
-      transform: scale(.75)
+      transform: translateZ(-55px) scale(.82);
+      z-index: 1
     }
 
     .fielder:before {
@@ -434,7 +454,8 @@
       bottom: 41%;
       width: 70px;
       height: 140px;
-      transform: translateX(-50%)
+      transform: translateX(-50%) translateZ(20px);
+      z-index: 4
     }
 
     .batter {
@@ -456,8 +477,9 @@
       bottom: 7%;
       width: 75px;
       height: 125px;
-      transform: translateX(-50%) scale(.82);
-      transform-origin: bottom center
+      transform: translateX(-50%) translateZ(12px) scale(.82);
+      transform-origin: bottom center;
+      z-index: 3
     }
 
     .batter .body {
