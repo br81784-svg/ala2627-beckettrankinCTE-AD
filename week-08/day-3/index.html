@@ -264,6 +264,25 @@
       box-shadow: 0 3px 0 #a98564
     }
 
+    .batter-box {
+      position: absolute;
+      bottom: 8%;
+      width: 64px;
+      height: 94px;
+      border: 2px solid #f5ead0aa;
+      background: #f5ead01a;
+      box-shadow: inset 0 0 0 1px #7f604b66;
+      z-index: 1
+    }
+
+    .batter-box.left-box {
+      left: calc(50% - 91px)
+    }
+
+    .batter-box.right-box {
+      left: calc(50% + 27px)
+    }
+
     .base {
       position: absolute;
       width: 20px;
@@ -419,10 +438,17 @@
     }
 
     .batter {
-      right: 24%;
+      left: calc(50% + 27px);
       bottom: 10%;
       width: 80px;
-      height: 155px
+      height: 155px;
+      z-index: 2
+    }
+
+    .batter.batter-left {
+      left: auto;
+      right: calc(50% + 27px);
+      transform: scaleX(-1)
     }
 
     .catcher {
@@ -525,6 +551,14 @@
       border-radius: 5px
     }
 
+    .batter-left .bat {
+      transform: rotate(48deg)
+    }
+
+    .batter-left .role {
+      transform: scaleX(-1)
+    }
+
     .batter .grip {
       left: 55px;
       top: 76px;
@@ -616,6 +650,10 @@
       animation: swing .45s ease
     }
 
+    .field.hit .batter-left .bat {
+      animation-name: swing-left
+    }
+
     .field.throwing .pitcher .arm {
       animation: pitch-arm .55s ease
     }
@@ -691,6 +729,12 @@
     @keyframes swing {
       50% {
         transform: rotate(-18deg)
+      }
+    }
+
+    @keyframes swing-left {
+      50% {
+        transform: rotate(18deg)
       }
     }
 
@@ -821,10 +865,17 @@
       }
 
       .batter {
-        right: 12%;
+        left: calc(50% + 27px);
+        right: auto;
         bottom: 9%;
         transform: scale(.82);
         transform-origin: bottom right
+      }
+
+      .batter.batter-left {
+        left: auto;
+        right: calc(50% + 27px);
+        transform: scaleX(-1) scale(.82)
       }
 
       .catcher {
@@ -860,6 +911,8 @@
       <div class="fence"></div>
       <div class="mound"></div>
       <div class="plate" aria-label="home plate"></div>
+      <div class="batter-box left-box" aria-label="left batter's box"></div>
+      <div class="batter-box right-box" aria-label="right batter's box"></div>
       <div class="base first-base" id="firstBase" aria-label="first base"></div>
       <div class="base second-base" id="secondBase" aria-label="second base"></div>
       <div class="base third-base" id="thirdBase" aria-label="third base"></div>
@@ -873,9 +926,9 @@
       <div class="ball"></div>
       <div class="person pitcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
           class="leg"></i><i class="leg two"></i><span class="role">Pitcher</span></div>
-      <div class="person batter"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
-          class="leg"></i><i class="leg two"></i><i class="grip"></i><i class="grip two"></i><i class="bat"></i><span
-          class="role">Batter</span></div>
+      <div class="person batter batter-right"><i class="head"></i><i class="body"></i><i class="arm"></i><i
+          class="arm two"></i><i class="leg"></i><i class="leg two"></i><i class="grip"></i><i class="grip two"></i><i
+          class="bat"></i><span class="role">Batter</span></div>
       <div class="person catcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
           class="leg"></i><i class="leg two"></i><i class="mask"></i><i class="glove"></i><span
           class="role">Catcher</span></div>
@@ -900,9 +953,10 @@
       var outs = document.querySelector(".outs");
       var home = document.getElementById("home");
       var away = document.getElementById("away");
+      var batter = document.querySelector(".batter");
       var baseElements = [document.getElementById("firstBase"), document.getElementById("secondBase"), document.getElementById("thirdBase")];
       var runners = [false, false, false];
-      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false;
+      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false, batterSide = "right";
 
       function syncFieldGeometry() {
         if (!field.clientWidth || !field.clientHeight) return;
@@ -913,6 +967,12 @@
 
       syncFieldGeometry();
       window.addEventListener("resize", syncFieldGeometry);
+
+      function switchBatterBox() {
+        batterSide = batterSide === "right" ? "left" : "right";
+        batter.classList.toggle("batter-right", batterSide === "right");
+        batter.classList.toggle("batter-left", batterSide === "left");
+      }
 
       function resetCount() {
         ballCount = 0;
@@ -975,6 +1035,7 @@
           if (locked) return;
           locked = true;
           setButtons(true);
+          switchBatterBox();
           var pitch = button.dataset.pitch;
           var hit = Math.random() < .15;
           var hitType = "";
