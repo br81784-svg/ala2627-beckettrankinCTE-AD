@@ -120,6 +120,7 @@
       position: relative;
       height: clamp(330px, 47vw, 500px);
       margin-top: 22px;
+      --base-offset: 18%;
       overflow: hidden;
       border: 2px solid #315b68;
       background: linear-gradient(#86bdca 0 39%, #d5bd83 39% 44%, #477854 44% 100%);
@@ -242,7 +243,7 @@
     .mound {
       position: absolute;
       left: 50%;
-      bottom: 47%;
+      bottom: 31%;
       width: 100px;
       height: 28px;
       background: radial-gradient(ellipse at 45% 35%, #d19a67, #9b6146 74%);
@@ -253,10 +254,11 @@
 
     .plate {
       position: absolute;
-      right: 13%;
+      left: 50%;
       bottom: 9%;
       width: 34px;
       height: 27px;
+      transform: translateX(-50%);
       background: #f5ead0;
       clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
       box-shadow: 0 3px 0 #a98564
@@ -304,18 +306,19 @@
     }
 
     .first-base {
-      right: 29%;
-      bottom: 20%
+      left: calc(50% + var(--base-offset));
+      bottom: 28%
     }
 
     .second-base {
-      right: 45%;
-      bottom: 35%
+      left: 50%;
+      bottom: 48%;
+      transform: translateX(-50%) rotate(45deg)
     }
 
     .third-base {
-      right: 61%;
-      bottom: 20%
+      left: calc(50% - var(--base-offset));
+      bottom: 28%
     }
 
     .infielder {
@@ -410,29 +413,31 @@
 
     .pitcher {
       left: 50%;
-      bottom: 50%;
+      bottom: 32%;
       width: 70px;
       height: 140px;
       transform: translateX(-50%)
     }
 
     .batter {
-      right: 20%;
-      bottom: 17%;
+      right: calc(50% - 5px);
+      bottom: 10%;
       width: 80px;
       height: 155px
     }
 
     .catcher {
-      right: 7%;
-      bottom: 12%;
+      left: 50%;
+      bottom: 7%;
       width: 75px;
-      height: 125px
+      height: 125px;
+      transform: translateX(-50%) scale(.82);
+      transform-origin: bottom center
     }
 
     .umpire {
-      right: 1%;
-      bottom: 13%;
+      left: calc(50% + 8%);
+      bottom: 4%;
       width: 54px;
       height: 145px;
       color: #182a38
@@ -831,23 +836,26 @@
       }
 
       .pitcher {
-        bottom: 50%
+        bottom: 32%
       }
 
       .batter {
-        right: 7%;
+        right: calc(50% - 5px);
+        bottom: 9%;
         transform: scale(.82);
         transform-origin: bottom right
       }
 
       .catcher {
-        right: 8%;
-        transform: scale(.82);
-        transform-origin: bottom right
+        left: 50%;
+        bottom: 6%;
+        transform: translateX(-50%) scale(.72);
+        transform-origin: bottom center
       }
 
       .umpire {
-        right: 1%;
+        left: calc(50% + 8%);
+        bottom: 3%;
         transform: scale(.72);
         transform-origin: bottom right
       }
@@ -922,6 +930,16 @@
       var baseElements = [document.getElementById("firstBase"), document.getElementById("secondBase"), document.getElementById("thirdBase")];
       var runners = [false, false, false];
       var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false;
+
+      function syncFieldGeometry() {
+        if (!field.clientWidth || !field.clientHeight) return;
+        var aspectRatio = field.clientWidth / field.clientHeight;
+        var baseOffset = Math.max(15, Math.min(21, aspectRatio * 10));
+        field.style.setProperty("--base-offset", baseOffset + "%");
+      }
+
+      syncFieldGeometry();
+      window.addEventListener("resize", syncFieldGeometry);
 
       function resetCount() {
         ballCount = 0;
