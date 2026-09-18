@@ -243,7 +243,7 @@
     .mound {
       position: absolute;
       left: 50%;
-      bottom: 31%;
+      bottom: 40%;
       width: 100px;
       height: 28px;
       background: radial-gradient(ellipse at 45% 35%, #d19a67, #9b6146 74%);
@@ -405,22 +405,21 @@
 
     .pitcher,
     .batter,
-    .catcher,
-    .umpire {
+    .catcher {
       position: absolute;
       color: var(--navy)
     }
 
     .pitcher {
       left: 50%;
-      bottom: 32%;
+      bottom: 41%;
       width: 70px;
       height: 140px;
       transform: translateX(-50%)
     }
 
     .batter {
-      right: calc(50% - 5px);
+      right: 24%;
       bottom: 10%;
       width: 80px;
       height: 155px
@@ -435,12 +434,8 @@
       transform-origin: bottom center
     }
 
-    .umpire {
-      left: calc(50% + 8%);
-      bottom: 4%;
-      width: 54px;
-      height: 145px;
-      color: #182a38
+    .batter .body {
+      background: linear-gradient(90deg, #8f2f2b, var(--red) 48%, #7b2825)
     }
 
     .person i {
@@ -566,16 +561,6 @@
       height: 25px;
       border: 5px solid currentColor;
       border-radius: 50%
-    }
-
-    .umpire .body {
-      height: 75px
-    }
-
-    .umpire .head {
-      width: 24px;
-      height: 24px;
-      left: 15px
     }
 
     .ball {
@@ -738,10 +723,6 @@
       left: -5px
     }
 
-    .umpire .role {
-      left: -10px
-    }
-
     .controls {
       margin-top: 22px;
       background: var(--white);
@@ -836,11 +817,11 @@
       }
 
       .pitcher {
-        bottom: 32%
+        bottom: 41%
       }
 
       .batter {
-        right: calc(50% - 5px);
+        right: 12%;
         bottom: 9%;
         transform: scale(.82);
         transform-origin: bottom right
@@ -853,12 +834,6 @@
         transform-origin: bottom center
       }
 
-      .umpire {
-        left: calc(50% + 8%);
-        bottom: 3%;
-        transform: scale(.72);
-        transform-origin: bottom right
-      }
     }
   </style>
 </head>
@@ -871,7 +846,7 @@
     </header>
     <section class="hero">
       <h1>The Ace</h1>
-      <p>Choose your pitch. The pitcher delivers, the batter has a 25% chance to make contact, and the count never lies.
+      <p>Choose your pitch. The pitcher delivers, the batter has a 15% chance to make contact, and the count never lies.
       </p>
     </section>
     <section class="board">
@@ -880,7 +855,7 @@
           class="outs">0 OUTS</small></section>
       <section><span>Away</span><b id="away">00</b></section>
     </section>
-    <section class="field" id="field" aria-label="Baseball field with pitcher, batter, catcher, and umpire">
+    <section class="field" id="field" aria-label="Baseball field with pitcher, batter, and catcher">
       <div class="crowd" aria-label="baseball crowd"></div>
       <div class="fence"></div>
       <div class="mound"></div>
@@ -904,8 +879,6 @@
       <div class="person catcher"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
           class="leg"></i><i class="leg two"></i><i class="mask"></i><i class="glove"></i><span
           class="role">Catcher</span></div>
-      <div class="person umpire"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="arm two"></i><i
-          class="leg"></i><i class="leg two"></i><span class="role">Umpire</span></div>
     </section>
     <section class="controls">
       <h2>Call the pitch</h2>
@@ -1003,7 +976,7 @@
           locked = true;
           setButtons(true);
           var pitch = button.dataset.pitch;
-          var hit = Math.random() < .25;
+          var hit = Math.random() < .15;
           var hitType = "";
           if (hit) {
             var distance = Math.random();
