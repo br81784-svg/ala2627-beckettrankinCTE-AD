@@ -823,6 +823,22 @@
       background: var(--blue)
     }
 
+    .field.pitching-mode .pitcher .body {
+      background: linear-gradient(90deg, #8f2f2b, var(--red) 48%, #7b2825)
+    }
+
+    .field.pitching-mode .pitcher .role {
+      background: var(--red)
+    }
+
+    .field.pitching-mode .batter .body {
+      background: linear-gradient(90deg, #173b68, var(--blue) 48%, #122c52)
+    }
+
+    .field.pitching-mode .batter .role {
+      background: var(--blue)
+    }
+
     .controls {
       margin-top: 22px;
       background: var(--white);
@@ -1013,13 +1029,16 @@
       var home = document.getElementById("home");
       var away = document.getElementById("away");
       var batter = document.querySelector(".batter");
+      var pitcher = document.querySelector(".pitcher");
       var controls = document.querySelector(".controls");
       var controlTitle = document.getElementById("controlTitle");
       var controlPrompt = document.getElementById("controlPrompt");
       var gameInfo = document.getElementById("gameInfo");
+      var pitcherRole = pitcher.querySelector(".role");
+      var batterRole = batter.querySelector(".role");
       var baseElements = [document.getElementById("firstBase"), document.getElementById("secondBase"), document.getElementById("thirdBase")];
       var runners = [false, false, false];
-      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, inning = 1, locked = false, batterSide = "right", hittingMode = true, pitchInFlight = false, pitchStartedAt = 0, currentPitch = null, gameOver = false;
+      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, inning = 1, half = "top", locked = false, batterSide = "right", hittingMode = true, pitchInFlight = false, pitchStartedAt = 0, currentPitch = null, gameOver = false;
       var pitchTypes = [
         { name: "Fastball", duration: 700, window: [570, 770] },
         { name: "Curveball", duration: 950, window: [760, 1020] },
@@ -1045,15 +1064,32 @@
       function enterHittingMode() {
         hittingMode = true;
         controls.classList.add("hitting-mode");
+        field.className = "field";
         controlTitle.textContent = "Hitting mode";
         controlPrompt.textContent = "Swing at the pitch to chase the home run.";
         buttons[0].firstChild.nodeValue = "Swing";
         buttons[0].querySelector("small").textContent = "make contact";
         buttons[0].dataset.pitch = "Swing";
+        pitcherRole.textContent = "Computer pitcher";
+        batterRole.textContent = "You";
+      }
+
+      function enterPitchingMode() {
+        hittingMode = false;
+        controls.classList.remove("hitting-mode");
+        field.className = "field pitching-mode";
+        controlTitle.textContent = "Pitching mode";
+        controlPrompt.textContent = "Choose a pitch for the computer to face.";
+        buttons[0].firstChild.nodeValue = "Fastball";
+        buttons[0].querySelector("small").textContent = "straight and quick";
+        buttons[0].dataset.pitch = "Fastball";
+        pitcherRole.textContent = "You";
+        batterRole.textContent = "Computer hitter";
       }
 
       function updateInningLabel() {
-        gameInfo.textContent = "Top of the " + inning + (inning === 1 ? "st" : inning === 2 ? "nd" : "rd") + " / 3 innings";
+        var ordinal = inning === 1 ? "st" : inning === 2 ? "nd" : "rd";
+        gameInfo.textContent = (half === "top" ? "Top" : "Bottom") + " of the " + inning + ordinal + " / 3 innings";
       }
 
       function startPitch() {
@@ -1088,9 +1124,15 @@
       }
 
       function finishHalfInning() {
-        var computerRuns = Math.floor(Math.random() * 3);
-        awayScore += computerRuns;
-        away.textContent = String(awayScore).padStart(2, "0");
+        resetInning();
+        if (half === "top") {
+          half = "bottom";
+          enterPitchingMode();
+          updateInningLabel();
+          result.textContent = "Three outs. Your turn to pitch the bottom half.";
+          return;
+        }
+
         if (inning === 3) {
           gameOver = true;
           result.textContent = "Three full innings complete. Final score recorded.";
@@ -1098,10 +1140,12 @@
           setButtons(true);
           return;
         }
+
         inning++;
-        resetInning();
+        half = "top";
+        enterHittingMode();
         updateInningLabel();
-        result.textContent = computerRuns ? "The computer scores " + computerRuns + " in the bottom half. Your turn." : "The computer is retired in the bottom half. Your turn.";
+        result.textContent = "Bottom half complete. Your turn to hit the top of the next inning.";
       }
 
       function setButtons(value) {
@@ -1143,16 +1187,19 @@
         button.addEventListener("click", function () {
           if (locked || gameOver) return;
 
-          if (hittingMode && !pitchInFlight) {
-            startPitch();
-            return;
+          if (hittingMode) {
+            if (!pitchInFlight) {
+              startPitch();
+              return;
+            }
+          } else {
+            locked = true;
+            setButtons(true);
           }
 
-          locked = true;
-          setButtons(true);
-          var pitch = currentPitch.name;
-          var timing = performance.now() - pitchStartedAt;
-          var hit = timing >= currentPitch.window[0] && timing <= currentPitch.window[1];
+          var pitch = hittingMode ? currentPitch.name : button.dataset.pitch;
+          var timing = hittingMode ? performance.now() - pitchStartedAt : 0;
+          var hit = hittingMode ? timing >= currentPitch.window[0] && timing <= currentPitch.window[1] : Math.random() < .1;
           pitchInFlight = false;
           pitchStartedAt = 0;
           currentPitch = null;
@@ -1161,7 +1208,7 @@
             var distance = Math.random();
             hitType = distance < .5 ? "single" : distance < .75 ? "double" : distance < .9 ? "triple" : "homer";
           }
-          field.className = "field " + (hit ? "hit " + hitType : "missed");
+          field.className = "field " + (hittingMode ? "" : "pitching-mode ") + (hit ? "hit " + hitType : "missed");
           result.className = "result";
           if (hit) {
             advanceRunners(hitType);
@@ -1187,7 +1234,7 @@
             }
           }
           setTimeout(function () {
-            field.className = "field";
+            field.className = hittingMode ? "field" : "field pitching-mode";
             if (!gameOver) {
               locked = false;
               setButtons(false);
