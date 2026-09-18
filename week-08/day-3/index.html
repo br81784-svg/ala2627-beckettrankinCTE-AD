@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Ace | Baseball game</title>
+  <title>The Home Run | Baseball game</title>
   <style>
     :root {
       --navy: #12243a;
@@ -647,6 +647,11 @@
       animation: throw 1s ease-in forwards
     }
 
+    .field.hitting-pitch .ball {
+      opacity: 1;
+      animation: hitting-pitch 1s linear forwards
+    }
+
     .field.hit .ball {
       opacity: 1;
       animation: home-run 1.25s cubic-bezier(.18, .7, .3, 1) forwards
@@ -687,6 +692,20 @@
 
     @keyframes throw {
       to {
+        left: calc(50% - 4px);
+        bottom: calc(9% + 10px);
+        transform: scale(.7)
+      }
+    }
+
+    @keyframes hitting-pitch {
+      0% {
+        left: calc(50% - 4px);
+        bottom: calc(41% + 70px);
+        transform: scale(1.1)
+      }
+
+      100% {
         left: calc(50% - 4px);
         bottom: calc(9% + 10px);
         transform: scale(.7)
@@ -815,6 +834,10 @@
       margin-top: 16px
     }
 
+    .controls.hitting-mode .pitch:not(:first-child) {
+      display: none
+    }
+
     .pitch {
       border: 2px solid var(--blue);
       background: #fff;
@@ -914,12 +937,12 @@
 <body>
   <main class="page">
     <header class="top">
-      <div class="logo">The <i>Ace</i></div>
+      <div class="logo">The <i>Home Run</i></div>
       <div class="gameinfo">Exhibition game / bottom of the 9th</div>
     </header>
     <section class="hero">
-      <h1>The Ace</h1>
-      <p>Choose your pitch. The pitcher delivers, the batter has a 15% chance to make contact, and the count never lies.
+      <h1>The Home Run</h1>
+      <p>Choose your pitch. The pitcher delivers, the batter has a 10% chance to make contact, and the count never lies.
       </p>
     </section>
     <section class="board">
@@ -956,8 +979,8 @@
           class="role">Catcher</span></div>
     </section>
     <section class="controls">
-      <h2>Call the pitch</h2>
-      <p>What is coming across the plate?</p>
+      <h2 id="controlTitle">Call the pitch</h2>
+      <p id="controlPrompt">What is coming across the plate?</p>
       <div class="pitches"><button class="pitch" data-pitch="Fastball">Fastball<small>straight and
             quick</small></button><button class="pitch" data-pitch="Curveball">Curveball<small>breaks
             late</small></button><button class="pitch" data-pitch="Changeup">Changeup<small>slows the
@@ -976,9 +999,12 @@
       var home = document.getElementById("home");
       var away = document.getElementById("away");
       var batter = document.querySelector(".batter");
+      var controls = document.querySelector(".controls");
+      var controlTitle = document.getElementById("controlTitle");
+      var controlPrompt = document.getElementById("controlPrompt");
       var baseElements = [document.getElementById("firstBase"), document.getElementById("secondBase"), document.getElementById("thirdBase")];
       var runners = [false, false, false];
-      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false, batterSide = "right";
+      var ballCount = 0, strikeCount = 0, outCount = 0, homeScore = 0, awayScore = 0, locked = false, batterSide = "right", hittingMode = false, pitchStartedAt = 0;
 
       function syncFieldGeometry() {
         if (!field.clientWidth || !field.clientHeight) return;
@@ -994,6 +1020,16 @@
         batterSide = batterSide === "right" ? "left" : "right";
         batter.classList.toggle("batter-right", batterSide === "right");
         batter.classList.toggle("batter-left", batterSide === "left");
+      }
+
+      function enterHittingMode() {
+        hittingMode = true;
+        controls.classList.add("hitting-mode");
+        controlTitle.textContent = "Hitting mode";
+        controlPrompt.textContent = "Swing at the pitch to chase the home run.";
+        buttons[0].firstChild.nodeValue = "Swing";
+        buttons[0].querySelector("small").textContent = "make contact";
+        buttons[0].dataset.pitch = "Swing";
       }
 
       function resetCount() {
@@ -1055,10 +1091,21 @@
       buttons.forEach(function (button) {
         button.addEventListener("click", function () {
           if (locked) return;
+
+          if (hittingMode && !pitchStartedAt) {
+            pitchStartedAt = performance.now();
+            field.className = "field hitting-pitch";
+            result.className = "result";
+            result.textContent = "Pitch on the way. Swing when it reaches the plate.";
+            return;
+          }
+
           locked = true;
           setButtons(true);
-          var pitch = button.dataset.pitch;
-          var hit = Math.random() < .15;
+          var pitch = hittingMode ? "Swing" : button.dataset.pitch;
+          var timing = performance.now() - pitchStartedAt;
+          var hit = hittingMode ? timing >= 650 && timing <= 850 : Math.random() < .1;
+          pitchStartedAt = 0;
           var hitType = "";
           if (hit) {
             var distance = Math.random();
@@ -1085,8 +1132,9 @@
               if (outCount === 3) {
                 awayScore++;
                 away.textContent = String(awayScore).padStart(2, "0");
-                result.textContent = "Three outs. The inning resets.";
+                result.textContent = "Three outs. Hitting mode begins!";
                 resetInning();
+                enterHittingMode();
               } else {
                 result.textContent = "Strike three! Out " + outCount + ".";
               }
