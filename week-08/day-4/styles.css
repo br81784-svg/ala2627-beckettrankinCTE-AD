@@ -407,6 +407,16 @@ body {
   opacity: .9
 }
 
+.scrimmage-line {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 30%;
+  border-left: 2px dashed rgba(255, 255, 255, .9);
+  box-shadow: 0 0 9px rgba(255, 255, 255, .45)
+}
+
 .player,
 .receiver,
 .defender {
@@ -739,7 +749,7 @@ body {
   font: 700 8px/1.1 Arial, sans-serif;
   text-align: center;
   text-shadow: 0 1px 3px #071d35;
-  opacity: 0;
+  opacity: .82;
   transition: opacity .15s
 }
 
@@ -788,6 +798,61 @@ body {
 
 .defensive .defense-player {
   transform: translate(-50%, -50%) scale(1.05)
+}
+
+.play-live .receiver-player,
+.play-live .rb-player,
+.play-live .wr-player,
+.play-live .te-player {
+  animation: routeRun 1.2s ease-in-out infinite alternate
+}
+
+.play-live .lineman-player {
+  animation: blockStep .5s ease-in-out infinite alternate
+}
+
+.rushing {
+  animation: rushForward .65s ease-in-out infinite alternate
+}
+
+.open-receiver {
+  color: #e5ff77;
+  filter: drop-shadow(0 0 7px #e5ff77)
+}
+
+.open-receiver .route-key {
+  opacity: 1;
+  font-size: 11px
+}
+
+@keyframes routeRun {
+  from {
+    transform: translate(-50%, -50%) translateY(0)
+  }
+
+  to {
+    transform: translate(-50%, -50%) translate(12px, -5px)
+  }
+}
+
+@keyframes blockStep {
+  from {
+    transform: translate(-50%, -50%)
+  }
+
+  to {
+    transform: translate(-46%, -50%)
+  }
+}
+
+@keyframes rushForward {
+  from {
+    transform: translate(-50%, -50%) scale(.88)
+  }
+
+  to {
+    transform: translate(-58%, -50%) scale(.96)
+  }
 }
 
 @keyframes toast {

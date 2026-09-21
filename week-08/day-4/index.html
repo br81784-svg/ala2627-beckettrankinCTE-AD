@@ -41,7 +41,8 @@
             class="mode-button" data-mode="defense" type="button">Defense</button>
         </div>
         <div class="tips">
-          <p><span class="key-group">↑ ↓ ← →</span> Move player</p>
+          <p><span class="key-group">↓</span> Hike the ball</p>
+          <p><span class="key-group">↑ ← →</span> Move player after hike</p>
           <p><span class="key-group">W A S D</span> Pass / tackle</p>
         </div>
         <div class="play-status" id="playStatus" aria-live="polite">Choose a receiver with W, A, S, or D.</div>
@@ -61,6 +62,7 @@
           <div class="yard-line line-80"><span>20</span></div>
           <div class="yard-line line-90"><span>10</span></div>
           <div class="end-zone right-zone"><span>AWAY</span></div>
+          <div class="scrimmage-line" aria-label="Line of scrimmage"></div>
           <div class="first-down" id="firstDown"></div>
           <div class="team-players offense-players" id="offensePlayers" aria-label="Your 11 players"></div>
           <div class="team-players defense-players" id="defensePlayers" aria-label="Opponent 11 players"></div>
@@ -78,7 +80,7 @@
       <div class="drive-stat"><small>Plays</small><strong id="plays">0</strong></div>
       <div class="drive-stat"><small>Possession</small><strong id="possession">1:59</strong></div>
     </section>
-    <p class="footer-note">A fan-made arcade experience. Arrow keys move. WASD selects your play.</p>
+    <p class="footer-note">↓ hikes the ball. Move after the snap. WASD passes on offense and tackles on defense.</p>
   </main>
   <script src="app.js"></script>
 </body>
