@@ -851,6 +851,25 @@ body {
   font-size: 11px
 }
 
+.catching {
+  animation: catchBall .52s ease-in-out;
+  filter: drop-shadow(0 0 9px #ffffff)
+}
+
+@keyframes catchBall {
+  0% {
+    transform: translate(-50%, -50%) scale(1)
+  }
+
+  45% {
+    transform: translate(-50%, -50%) scale(1.3) rotate(-8deg)
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1)
+  }
+}
+
 @keyframes routeRun {
   from {
     transform: translate(-50%, -50%) translateY(0)
