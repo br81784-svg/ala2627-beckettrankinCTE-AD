@@ -1,9 +1,10 @@
 :root {
   --ink: #101820;
-  --paper: #f4f1e8;
+  --paper: #dfe9dc;
   --orange: #ee6c35;
   --field: #19764d;
   --field-dark: #125c3b;
+  --navy: #071d35;
   --line: rgba(255, 255, 255, .62);
   --muted: #777d78
 }
@@ -14,8 +15,8 @@
 
 body {
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: linear-gradient(135deg, var(--navy) 0 18%, #0d3b35 52%, #165b3f 100%);
+  color: var(--paper);
   font-family: Arial, Helvetica, sans-serif;
   min-height: 100vh
 }
@@ -30,7 +31,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #d2cfc5;
+  border-bottom: 1px solid rgba(223, 233, 220, .25);
   padding-bottom: 19px
 }
 
@@ -49,8 +50,8 @@ body {
   place-items: center;
   width: 34px;
   height: 34px;
-  background: var(--ink);
-  color: var(--paper);
+  background: #8ac926;
+  color: var(--navy);
   font-size: 12px;
   letter-spacing: -.08em
 }
@@ -68,7 +69,7 @@ body {
 }
 
 .league-tag {
-  color: var(--muted)
+  color: #b5c7bb
 }
 
 .league-tag span {
@@ -77,9 +78,9 @@ body {
 }
 
 .restart-button {
-  border: 1px solid #bdbcb5;
+  border: 1px solid rgba(223, 233, 220, .45);
   background: transparent;
-  color: var(--ink);
+  color: var(--paper);
   padding: 10px 14px;
   font-weight: 700;
   cursor: pointer
@@ -87,8 +88,8 @@ body {
 
 .restart-button:hover,
 .restart-button:focus-visible {
-  background: var(--ink);
-  color: var(--paper)
+  background: #8ac926;
+  color: var(--navy)
 }
 
 .scoreboard {
@@ -115,13 +116,13 @@ body {
 }
 
 .away-score {
-  color: #7d817c
+  color: #a8bcad
 }
 
 .game-clock {
   text-align: center;
-  border-left: 1px solid #d2cfc5;
-  border-right: 1px solid #d2cfc5;
+  border-left: 1px solid rgba(223, 233, 220, .25);
+  border-right: 1px solid rgba(223, 233, 220, .25);
   padding: 0 29px
 }
 
@@ -131,7 +132,7 @@ body {
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--muted)
+  color: #a8bcad
 }
 
 .game-clock strong {
@@ -171,16 +172,16 @@ body {
 
 .select-label {
   display: block;
-  color: var(--muted);
+  color: #b5c7bb;
   font-weight: 700;
   margin-bottom: 7px
 }
 
 .control-panel select {
   width: 100%;
-  border: 1px solid #c8c6bd;
-  background: transparent;
-  color: var(--ink);
+  border: 1px solid rgba(223, 233, 220, .45);
+  background: var(--navy);
+  color: var(--paper);
   padding: 11px 9px;
   font: 600 13px Arial;
   cursor: pointer
@@ -211,14 +212,14 @@ body {
 
 .team-swatch small {
   font-size: 10px;
-  color: var(--muted);
+  color: #b5c7bb;
   margin-top: 3px
 }
 
 .mode-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid #8ac926;
   margin-bottom: 21px
 }
 
@@ -226,7 +227,7 @@ body {
   border: 0;
   background: transparent;
   padding: 11px 2px;
-  color: var(--muted);
+  color: #b5c7bb;
   font-weight: 800;
   font-size: 11px;
   letter-spacing: .08em;
@@ -235,13 +236,13 @@ body {
 }
 
 .mode-button.active {
-  background: var(--ink);
-  color: var(--paper)
+  background: #8ac926;
+  color: var(--navy)
 }
 
 .tips {
   line-height: 2.2;
-  color: var(--muted)
+  color: #b5c7bb
 }
 
 .tips p {
@@ -251,7 +252,7 @@ body {
 .key-group {
   display: inline-block;
   min-width: 68px;
-  color: var(--ink);
+  color: #8ac926;
   font-weight: 900;
   font-size: 10px;
   letter-spacing: .04em
@@ -261,7 +262,7 @@ body {
   margin-top: 20px;
   border-left: 3px solid var(--orange);
   padding: 10px 12px;
-  background: #e8e4da;
+  background: rgba(7, 29, 53, .8);
   font-size: 12px;
   line-height: 1.35;
   font-weight: 700
@@ -275,7 +276,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--ink);
+  background: var(--navy);
   color: var(--paper);
   font-weight: 800;
   font-size: 11px;
@@ -548,7 +549,7 @@ body {
   display: flex;
   gap: 20px;
   padding: 11px 2px;
-  color: var(--muted);
+  color: #b5c7bb;
   font-weight: 700
 }
 
@@ -615,8 +616,178 @@ body {
 
 .footer-note {
   text-align: center;
-  color: #9a9c96;
+  color: #a8bcad;
   margin: 19px 0 0
+}
+
+.opponent-card {
+  border-left: 3px solid #d73332;
+  background: rgba(7, 29, 53, .72);
+  padding: 9px 11px;
+  margin: -8px 0 22px;
+  font-size: 12px
+}
+
+.opponent-card span,
+.opponent-card strong {
+  display: block
+}
+
+.opponent-card span {
+  color: #b5c7bb;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 4px
+}
+
+.team-players {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none
+}
+
+.stick-player {
+  position: absolute;
+  width: 30px;
+  height: 42px;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  transition: left .18s ease, top .18s ease, transform .18s ease;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .45))
+}
+
+.stick-head {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: #f0c49a
+}
+
+.stick-body {
+  position: absolute;
+  left: 14px;
+  top: 11px;
+  width: 3px;
+  height: 15px;
+  background: currentColor
+}
+
+.stick-arms,
+.stick-legs {
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  width: 21px;
+  height: 3px;
+  background: currentColor;
+  transform: rotate(-8deg)
+}
+
+.stick-legs {
+  left: 9px;
+  top: 26px;
+  width: 17px;
+  transform: rotate(58deg)
+}
+
+.stick-legs:after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 7px;
+  width: 17px;
+  height: 3px;
+  background: currentColor;
+  transform: rotate(64deg)
+}
+
+.offense-player {
+  color: var(--team-primary, #8ac926)
+}
+
+.offense-player .stick-body,
+.offense-player .stick-arms,
+.offense-player .stick-legs,
+.offense-player .stick-legs:after {
+  background: var(--team-primary, #8ac926)
+}
+
+.defense-player {
+  color: #f5f7eb;
+}
+
+.defense-player .stick-body,
+.defense-player .stick-arms,
+.defense-player .stick-legs,
+.defense-player .stick-legs:after {
+  background: #d73332
+}
+
+.player-label {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  width: 92px;
+  transform: translateX(-50%);
+  color: #fff;
+  font: 700 8px/1.1 Arial, sans-serif;
+  text-align: center;
+  text-shadow: 0 1px 3px #071d35;
+  opacity: 0;
+  transition: opacity .15s
+}
+
+.player-label small {
+  display: block;
+  color: #d8efb5;
+  font-size: 7px;
+  letter-spacing: .12em
+}
+
+.stick-player:hover .player-label,
+.stick-player:focus .player-label {
+  opacity: 1
+}
+
+.route-key {
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  transform: translateX(-50%);
+  color: var(--navy);
+  font: 900 8px Arial;
+}
+
+.lineman-player .stick-body {
+  width: 7px;
+  left: 12px;
+  background: var(--team-primary, #8ac926)
+}
+
+.lineman-player .stick-arms {
+  width: 25px
+}
+
+.lineman-player .route-key {
+  display: none
+}
+
+.defense-players .stick-player {
+  transform: translate(-50%, -50%) scale(.88)
+}
+
+.defensive .offense-player {
+  opacity: .7
+}
+
+.defensive .defense-player {
+  transform: translate(-50%, -50%) scale(1.05)
 }
 
 @keyframes toast {

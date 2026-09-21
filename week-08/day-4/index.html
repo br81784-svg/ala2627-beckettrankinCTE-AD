@@ -4,15 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fourth Down | Football Arcade</title>
+  <title>Stick Figure Football</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <main class="game-shell">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark">04</span><span>FOURTH<br>DOWN</span></div>
-      <div class="league-tag">Sunday Night Arcade <span>•</span> Season 25</div>
+      <div class="brand"><span class="brand-mark">SF</span><span>STICK FIGURE<br>FOOTBALL</span></div>
+      <div class="league-tag">Field Level Arcade <span>•</span> Season 25</div>
       <button class="restart-button" id="restartButton" type="button">Restart game</button>
     </header>
     <section class="scoreboard" aria-label="Game scoreboard">
@@ -35,6 +35,7 @@
         <div class="team-swatch" id="teamSwatch"><span></span>
           <div><strong id="teamName">Seattle Seahawks</strong><small id="teamRecord">12 - 5 · NFC West</small></div>
         </div>
+        <div class="opponent-card"><span>Opponent</span><strong id="opponentName">New England Patriots</strong></div>
         <div class="mode-switch" role="group" aria-label="Play mode">
           <button class="mode-button active" data-mode="offense" type="button">Offense</button><button
             class="mode-button" data-mode="defense" type="button">Defense</button>
@@ -61,15 +62,8 @@
           <div class="yard-line line-90"><span>10</span></div>
           <div class="end-zone right-zone"><span>AWAY</span></div>
           <div class="first-down" id="firstDown"></div>
-          <div class="player quarterback" id="quarterback"><span class="player-icon">QB</span><i></i></div>
-          <div class="receiver receiver-a" data-receiver="A"><span>A</span><small>WR</small></div>
-          <div class="receiver receiver-w" data-receiver="W"><span>W</span><small>WR</small></div>
-          <div class="receiver receiver-s" data-receiver="S"><span>S</span><small>TE</small></div>
-          <div class="receiver receiver-d" data-receiver="D"><span>D</span><small>RB</small></div>
-          <div class="defender defender-a"><span>●</span></div>
-          <div class="defender defender-b"><span>●</span></div>
-          <div class="defender defender-c"><span>●</span></div>
-          <div class="defender defender-d"><span>●</span></div>
+          <div class="team-players offense-players" id="offensePlayers" aria-label="Your 11 players"></div>
+          <div class="team-players defense-players" id="defensePlayers" aria-label="Opponent 11 players"></div>
           <div class="ball" id="ball">🏈</div>
           <div class="field-toast" id="fieldToast">READY?</div>
         </div>
