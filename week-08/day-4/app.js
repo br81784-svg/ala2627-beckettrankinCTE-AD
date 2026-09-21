@@ -1,8 +1,8 @@
 const teams = {
-  seahawks: { name: "Seattle Seahawks", abbr: "SEA", primary: "#69be28", secondary: "#12284b", record: "12 - 5 · NFC West", roster: ["Geno Smith", "Kenneth Walker III", "DK Metcalf", "Tyler Lockett", "Jaxon Smith-Njigba", "Noah Fant", "Charles Cross", "Damien Lewis", "Jason Peters", "Boye Mafe", "Julian Love"] },
-  patriots: { name: "New England Patriots", abbr: "NE", primary: "#c8102e", secondary: "#0d2b56", record: "10 - 7 · AFC East", roster: ["Drake Maye", "Rhamondre Stevenson", "Demario Douglas", "Kendrick Bourne", "Ja'Lynn Polk", "Hunter Henry", "Trent Brown", "Mike Onwenu", "David Andrews", "Matthew Judon", "Jabrill Peppers"] },
-  "49ers": { name: "San Francisco 49ers", abbr: "SF", primary: "#aa0000", secondary: "#b3995d", record: "12 - 5 · NFC West", roster: ["Brock Purdy", "Christian McCaffrey", "Deebo Samuel", "Brandon Aiyuk", "Jauan Jennings", "George Kittle", "Trent Williams", "Aaron Banks", "Jake Brendel", "Nick Bosa", "Fred Warner"] },
-  rams: { name: "Los Angeles Rams", abbr: "LA", primary: "#ffa300", secondary: "#003594", record: "10 - 7 · NFC West", roster: ["Matthew Stafford", "Kyren Williams", "Cooper Kupp", "Puka Nacua", "Tutu Atwell", "Tyler Higbee", "Alaric Jackson", "Steve Avila", "Kevin Dotson", "Kobie Turner", "Bobby Wagner"] }
+  seahawks: { name: "Seattle Seahawks", abbr: "SEA", primary: "#69be28", secondary: "#12284b", record: "12 - 5 · NFC West", roster: ["Sam Darnold", "Kenneth Walker III", "Jaxon Smith-Njigba", "Cooper Kupp", "Rashid Shaheed", "AJ Barner", "Charles Cross", "Grey Zabel", "Jalen Sundell", "Leonard Williams", "Devon Witherspoon"] },
+  patriots: { name: "New England Patriots", abbr: "NE", primary: "#c8102e", secondary: "#0d2b56", record: "10 - 7 · AFC East", roster: ["Drake Maye", "Rhamondre Stevenson", "Stefon Diggs", "Kayshon Boutte", "Mack Hollins", "Hunter Henry", "Will Campbell", "Mike Onwenu", "Ben Brown", "Christian Barmore", "Christian Gonzalez"] },
+  "49ers": { name: "San Francisco 49ers", abbr: "SF", primary: "#aa0000", secondary: "#b3995d", record: "12 - 5 · NFC West", roster: ["Brock Purdy", "Christian McCaffrey", "Brandon Aiyuk", "Jauan Jennings", "Ricky Pearsall", "George Kittle", "Trent Williams", "Aaron Banks", "Jake Brendel", "Nick Bosa", "Fred Warner"] },
+  rams: { name: "Los Angeles Rams", abbr: "LA", primary: "#ffa300", secondary: "#003594", record: "10 - 7 · NFC West", roster: ["Matthew Stafford", "Kyren Williams", "Puka Nacua", "Davante Adams", "Tutu Atwell", "Tyler Higbee", "Alaric Jackson", "Steve Avila", "Kevin Dotson", "Kobie Turner", "Byron Young"] }
 };
 const opponentOrder = ["seahawks", "patriots", "49ers", "rams"];
 const offenseShape = [
@@ -68,7 +68,7 @@ function toast(message) {
 }
 function move(dx, dy) {
   if (!playLive || mode !== "offense") return;
-  ballX = Math.max(12, Math.min(83, ballX + dx)); ballY = Math.max(11, Math.min(87, ballY + dy));
+  ballX = Math.max(12, Math.min(83, ballX + dx * 2)); ballY = Math.max(11, Math.min(87, ballY + dy * 2));
   const quarterback = $("quarterback"); quarterback.style.left = `${ballX}%`; quarterback.style.top = `${ballY}%`;
   quarterback.classList.add("running");
 }
@@ -79,6 +79,16 @@ function hike() {
   document.querySelectorAll(".defense-player").forEach((player, index) => {
     player.style.left = `${Math.min(78, parseFloat(player.style.left) + (index % 3) * 2)}%`;
     player.classList.add("rushing");
+  });
+  const coverage = { W: 0, A: 1, S: 2 };
+  Object.entries(coverage).forEach(([receiver, defenderIndex]) => {
+    const target = document.querySelector(`[data-receiver="${receiver}"]`);
+    const defender = document.querySelectorAll(".defense-player")[defenderIndex];
+    if (!target || !defender) return;
+    target.classList.add("covered-receiver");
+    defender.classList.add("coverage-player");
+    defender.style.left = `${parseFloat(target.style.left) + 4}%`;
+    defender.style.top = `${parseFloat(target.style.top)}%`;
   });
 }
 function moveToDefense(reason) {
