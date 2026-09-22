@@ -1,169 +1,29 @@
-const teams = {
-  seahawks: { name: "Seattle Seahawks", abbr: "SEA", primary: "#69be28", secondary: "#12284b", record: "12 - 5 · NFC West", roster: ["Sam Darnold", "Kenneth Walker III", "Jaxon Smith-Njigba", "Cooper Kupp", "Rashid Shaheed", "AJ Barner", "Charles Cross", "Grey Zabel", "Jalen Sundell", "Leonard Williams", "Devon Witherspoon"] },
-  patriots: { name: "New England Patriots", abbr: "NE", primary: "#c8102e", secondary: "#0d2b56", record: "10 - 7 · AFC East", roster: ["Drake Maye", "Rhamondre Stevenson", "Stefon Diggs", "Kayshon Boutte", "Mack Hollins", "Hunter Henry", "Will Campbell", "Mike Onwenu", "Ben Brown", "Christian Barmore", "Christian Gonzalez"] },
-  "49ers": { name: "San Francisco 49ers", abbr: "SF", primary: "#aa0000", secondary: "#b3995d", record: "12 - 5 · NFC West", roster: ["Brock Purdy", "Christian McCaffrey", "Brandon Aiyuk", "Jauan Jennings", "Ricky Pearsall", "George Kittle", "Trent Williams", "Aaron Banks", "Jake Brendel", "Nick Bosa", "Fred Warner"] },
-  rams: { name: "Los Angeles Rams", abbr: "LA", primary: "#ffa300", secondary: "#003594", record: "10 - 7 · NFC West", roster: ["Matthew Stafford", "Kyren Williams", "Puka Nacua", "Davante Adams", "Tutu Atwell", "Tyler Higbee", "Alaric Jackson", "Steve Avila", "Kevin Dotson", "Kobie Turner", "Byron Young"] }
-};
-const opponentOrder = ["seahawks", "patriots", "49ers", "rams"];
-const offenseShape = [
-  ["QB", 22, 51, "quarterback"], ["RB", 25, 59, "receiver-d"], ["WR", 20, 22, "receiver-a"],
-  ["WR", 22, 79, "receiver-w"], ["TE", 30, 38, "receiver-s"], ["LT", 30, 39, "lineman"],
-  ["LG", 30, 44, "lineman"], ["C", 30, 50, "lineman"], ["RG", 30, 56, "lineman"],
-  ["RT", 30, 61, "lineman"], ["FB", 26, 51, "lineman"]
+const teamData = [
+  ["cardinals", "Arizona Cardinals", "ARI", "#97233f", "#ffb612"], ["falcons", "Atlanta Falcons", "ATL", "#a71930", "#000000"], ["ravens", "Baltimore Ravens", "BAL", "#241773", "#9e7c0c"], ["bills", "Buffalo Bills", "BUF", "#00338d", "#c60c30"], ["panthers", "Carolina Panthers", "CAR", "#0085ca", "#101820"], ["bears", "Chicago Bears", "CHI", "#0b162a", "#c83803"], ["bengals", "Cincinnati Bengals", "CIN", "#fb4f14", "#000000"], ["browns", "Cleveland Browns", "CLE", "#311d00", "#ff3c00"], ["cowboys", "Dallas Cowboys", "DAL", "#003594", "#869397"], ["broncos", "Denver Broncos", "DEN", "#fb4f14", "#002244"], ["lions", "Detroit Lions", "DET", "#0076b6", "#b0b7bc"], ["packers", "Green Bay Packers", "GB", "#203731", "#ffb612"], ["texans", "Houston Texans", "HOU", "#03202f", "#a71930"], ["colts", "Indianapolis Colts", "IND", "#002c5f", "#a2aaad"], ["jaguars", "Jacksonville Jaguars", "JAX", "#006778", "#d7a22a"], ["chiefs", "Kansas City Chiefs", "KC", "#e31837", "#ffb81c"], ["raiders", "Las Vegas Raiders", "LV", "#000000", "#a5acaf"], ["chargers", "Los Angeles Chargers", "LAC", "#0080c6", "#ffc20e"], ["rams", "Los Angeles Rams", "LA", "#003594", "#ffa300"], ["dolphins", "Miami Dolphins", "MIA", "#008e97", "#fc4c02"], ["vikings", "Minnesota Vikings", "MIN", "#4f2683", "#ffc62f"], ["patriots", "New England Patriots", "NE", "#002244", "#c60c30"], ["saints", "New Orleans Saints", "NO", "#d3bc8d", "#101820"], ["giants", "New York Giants", "NYG", "#0b2265", "#a71930"], ["jets", "New York Jets", "NYJ", "#125740", "#000000"], ["eagles", "Philadelphia Eagles", "PHI", "#004c54", "#a5acaf"], ["steelers", "Pittsburgh Steelers", "PIT", "#101820", "#ffb612"], ["49ers", "San Francisco 49ers", "SF", "#aa0000", "#b3995d"], ["seahawks", "Seattle Seahawks", "SEA", "#002244", "#69be28"], ["buccaneers", "Tampa Bay Buccaneers", "TB", "#d50a0a", "#34302b"], ["titans", "Tennessee Titans", "TEN", "#0c2340", "#4b92db"], ["commanders", "Washington Commanders", "WAS", "#5a1414", "#ffb612"]
 ];
-const defenseShape = [
-  ["CB", 44, 19], ["S", 57, 25], ["DE", 41, 38], ["DT", 43, 46], ["NT", 47, 51],
-  ["DT", 43, 56], ["DE", 41, 64], ["LB", 51, 40], ["LB", 53, 63], ["CB", 44, 80], ["S", 67, 28]
-];
-const $ = (id) => document.getElementById(id);
-const field = $("field");
-let selectedTeam = "seahawks", mode = "offense", yards = 0, plays = 0, score = 0, gameSeconds = 300, ballX = 22, ballY = 51, down = 1, distance = 10;
-let opponentTeam = "patriots", playLive = false, openReceiver = "D", gameTimer, scrimmageX = 30, firstDownX = 40;
-function getOpponent() {
-  opponentTeam = opponentOrder.find((teamKey) => teamKey !== selectedTeam);
-  return teams[opponentTeam];
-}
-function makeStickFigure(name, role, x, y, side, index, receiverKey) {
-  const player = document.createElement("div");
-  const linemanClass = ["LT", "LG", "C", "RG", "RT", "FB"].includes(role) ? " lineman-player" : "";
-  player.className = `stick-player ${side}-player ${role.toLowerCase()}-player${linemanClass}`;
-  player.style.left = `${x}%`; player.style.top = `${y}%`; player.dataset.name = name; player.dataset.role = role;
-  if (receiverKey) player.dataset.receiver = receiverKey;
-  if (role === "QB") player.id = "quarterback";
-  player.innerHTML = `<span class="stick-head"></span><span class="stick-body"></span><span class="stick-arms"></span><span class="stick-legs"></span><b class="player-label">${name}<small>${role}</small></b><strong class="route-key">${receiverKey || ""}</strong>`;
-  player.style.setProperty("--player-index", index);
-  return player;
-}
-function renderPlayers() {
-  const offense = $("offensePlayers"); const defense = $("defensePlayers");
-  offense.replaceChildren(); defense.replaceChildren();
-  const offenseTeam = teams[selectedTeam]; const defenseTeam = getOpponent();
-  const receiverKeys = { 1: "D", 2: "A", 3: "W", 4: "S" };
-  offenseTeam.roster.forEach((name, index) => {
-    const [role, x, y] = offenseShape[index];
-    const displayName = role === "QB" ? "Sam Darnold" : name;
-    offense.appendChild(makeStickFigure(displayName, role, x, y, "offense", index, receiverKeys[index]));
-  });
-  defenseTeam.roster.forEach((name, index) => {
-    const [role, x, y] = defenseShape[index]; defense.appendChild(makeStickFigure(name, role, x, y, "defense", index));
-  });
-  setOpenReceiver();
-  $("awayLabel").textContent = defenseTeam.abbr; $("opponentName").textContent = defenseTeam.name; $("possessionText").textContent = `${offenseTeam.abbr} BALL`;
-}
-function setOpenReceiver() {
-  document.querySelectorAll(".offense-player").forEach((player) => player.classList.remove("open-receiver", "covered-receiver"));
-  const openPlayer = document.querySelector(`.offense-player[data-receiver="${openReceiver}"]`);
-  if (openPlayer) openPlayer.classList.add("open-receiver");
-}
-function updateTeam() {
-  const team = teams[selectedTeam];
-  document.documentElement.style.setProperty("--team-primary", team.primary);
-  document.documentElement.style.setProperty("--team-secondary", team.secondary);
-  $("teamName").textContent = team.name; $("teamRecord").textContent = team.record; $("homeLabel").textContent = team.abbr;
-  renderPlayers();
-}
-function updateStats() {
-  $("yards").textContent = yards; $("plays").textContent = plays; $("homeScore").textContent = score;
-  $("possession").textContent = `${Math.floor(gameSeconds / 60)}:${String(gameSeconds % 60).padStart(2, "0")}`;
-  const suffix = down === 1 ? "st" : down === 2 ? "nd" : down === 3 ? "rd" : "th";
-  $("downDistance").innerHTML = `${down}${suffix} &amp; ${distance}`; $("playText").textContent = `${down === 1 ? "1ST" : down === 2 ? "2ND" : down === 3 ? "3RD" : "4TH"} & ${distance} · OWN ${25 + yards}`;
-  $("clock").textContent = `${Math.floor(gameSeconds / 60)}:${String(gameSeconds % 60).padStart(2, "0")}`;
-}
-function toast(message) {
-  const display = $("fieldToast"); display.textContent = message; display.classList.remove("show"); void display.offsetWidth; display.classList.add("show");
-}
-function move(dx, dy) {
-  if (!playLive || mode !== "offense") return;
-  ballX = Math.max(12, Math.min(83, ballX + dx * 2)); ballY = Math.max(11, Math.min(87, ballY + dy * 2));
-  const quarterback = $("quarterback"); quarterback.style.left = `${ballX}%`; quarterback.style.top = `${ballY}%`;
-  quarterback.classList.add("running");
-}
-function hike() {
-  if (playLive || mode !== "offense") return;
-  const receiverOptions = ["W", "A", "S", "D"];
-  openReceiver = receiverOptions[Math.floor(Math.random() * receiverOptions.length)];
-  setOpenReceiver();
-  playLive = true; field.classList.add("play-live"); toast("HIKE!");
-  $("playStatus").textContent = `Play live. Pass to the glowing ${openReceiver} receiver or run with the arrows.`;
-  document.querySelectorAll(".defense-player").forEach((player, index) => {
-    player.style.left = `${Math.min(78, parseFloat(player.style.left) + (index % 3) * 2)}%`;
-    player.classList.add("rushing");
-  });
-  const coveredReceivers = ["W", "A", "S", "D"].filter((receiver) => receiver !== openReceiver);
-  coveredReceivers.forEach((receiver, defenderIndex) => {
-    const target = document.querySelector(`[data-receiver="${receiver}"]`);
-    const defender = document.querySelectorAll(".defense-player")[defenderIndex];
-    if (!target || !defender) return;
-    target.classList.add("covered-receiver");
-    defender.classList.add("coverage-player");
-    defender.style.left = `${parseFloat(target.style.left) + 4}%`;
-    defender.style.top = `${parseFloat(target.style.top)}%`;
-  });
-}
-function moveToDefense(reason) {
-  playLive = false; mode = "defense"; field.classList.remove("play-live"); field.classList.add("defensive");
-  document.querySelectorAll(".mode-button").forEach((button) => button.classList.toggle("active", button.dataset.mode === "defense"));
-  $("playStatus").textContent = reason || "Turnover on downs. Stop the opponent with WASD.";
-  toast("NOW DEFEND");
-}
-function moveToOffense() {
-  playLive = false; mode = "offense"; down = 1; distance = 10; scrimmageX = 30; firstDownX = 40; field.classList.remove("defensive", "play-live");
-  $("scrimmageLine").style.left = `${scrimmageX}%`; $("firstDown").style.left = `${firstDownX}%`;
-  document.querySelectorAll(".mode-button").forEach((button) => button.classList.toggle("active", button.dataset.mode === "offense"));
-  $("playStatus").textContent = "Offense back on the field. Press ↓ to hike."; updateStats();
-}
-function pass(receiver) {
-  if (mode === "defense") { tackle(receiver); return; }
-  if (!playLive) { $("playStatus").textContent = "Press ↓ to hike before choosing a pass."; return; }
-  const outcomes = { W: [18, "COMPLETE!"], A: [11, "DOT!"], S: [7, "SHORT GAIN"], D: [14, "OPEN RECEIVER!" ] };
-  const [gain, message] = outcomes[receiver]; const target = document.querySelector(`[data-receiver="${receiver}"]`); const ball = $("ball");
-  plays += 1; gameSeconds = Math.max(0, gameSeconds - 8); playLive = false; field.classList.remove("play-live");
-  if (receiver !== openReceiver || !target) { toast("INCOMPLETE!"); finishDown(0, false); return; }
-  const catchX = Math.min(88, parseFloat(target.style.left) + gain * 1.15);
-  target.style.left = `${catchX}%`; target.classList.add("catching");
-  ball.style.left = `${catchX}%`; ball.style.top = target.style.top; ball.style.opacity = "1";
-  $("playStatus").textContent = `${target.dataset.name} is running to the catch point...`;
-  setTimeout(() => {
-    ball.style.opacity = "0"; target.classList.remove("catching"); toast(message); finishDown(gain, true);
-  }, 520);
-}
-function finishDown(gain, completed) {
-  if (completed) { yards += gain; distance = Math.max(0, distance - gain); shiftFormation(gain); }
-  if (yards >= 75) { score += 7; toast("TOUCHDOWN!"); moveToDefense("Touchdown! Now stop the opponent."); updateStats(); return; }
-  if (distance <= 0) { down = 1; distance = 10; $("playStatus").textContent = "First down! Press ↓ for the next snap."; }
-  else if (down === 4) { moveToDefense("Turnover on downs. Stop the opponent with WASD."); updateStats(); return; }
-  else { down += 1; $("playStatus").textContent = `Play over. ${down}${down === 2 ? "nd" : down === 3 ? "rd" : "th"} down: press ↓ to hike.`; }
-  updateStats();
-}
-function shiftFormation(gain) {
-  const shift = Math.min(14, gain * 0.72);
-  document.querySelectorAll(".offense-player, .defense-player").forEach((player) => {
-    const currentX = parseFloat(player.style.left);
-    player.style.left = `${Math.min(90, currentX + shift)}%`;
-  });
-  scrimmageX = Math.min(78, scrimmageX + shift); firstDownX = Math.min(88, firstDownX + shift);
-  $("scrimmageLine").style.left = `${scrimmageX}%`; $("firstDown").style.left = `${firstDownX}%`;
-}
-function tackle(direction) {
-  if (mode !== "defense") return;
-  plays += 1; gameSeconds = Math.max(0, gameSeconds - 6); toast("BIG HIT!");
-  $("playStatus").textContent = `Tackle made with ${direction}. You forced a stop. Press Offense to take the ball.`; updateStats();
-}
-function setMode(nextMode) {
-  mode = nextMode; document.querySelectorAll(".mode-button").forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
-  playLive = false; $("playStatus").textContent = mode === "offense" ? "Press ↓ to hike, then choose a receiver." : "Close the gap. Use WASD to make a tackle."; field.classList.toggle("defensive", mode === "defense"); field.classList.remove("play-live");
-}
-function resetGame() {
-  yards = 0; plays = 0; score = 0; gameSeconds = 300; down = 1; distance = 10; ballX = 22; ballY = 51; scrimmageX = 30; firstDownX = 40; openReceiver = "D"; setMode("offense"); $("quarterback").style.left = `${ballX}%`; $("quarterback").style.top = `${ballY}%`; $("scrimmageLine").style.left = `${scrimmageX}%`; $("firstDown").style.left = `${firstDownX}%`; $("playStatus").textContent = "Press ↓ to hike, then choose a receiver."; updateStats(); toast("KICKOFF");
-}
-$("teamSelect").addEventListener("change", (event) => { selectedTeam = event.target.value; updateTeam(); resetGame(); });
-document.querySelectorAll(".mode-button").forEach((button) => button.addEventListener("click", () => setMode(button.dataset.mode)));
-$("restartButton").addEventListener("click", resetGame);
-document.addEventListener("keydown", (event) => {
-  const key = event.key.toLowerCase(); if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d"].includes(key)) event.preventDefault();
-  if (key === "arrowdown") { if (mode === "offense") hike(); else move(0, 4); }
-  if (key === "arrowup") move(0, -4); if (key === "arrowleft") move(-4, 0); if (key === "arrowright") move(4, 0); if (["w", "a", "s", "d"].includes(key)) pass(key.toUpperCase());
-});
-$("clock").textContent = "5:00";
-gameTimer = setInterval(() => { if (gameSeconds > 0) { gameSeconds -= 1; updateStats(); } else { moveToDefense("Time expired. Final whistle."); } }, 1000);
-updateTeam(); updateStats();
+const teams = Object.fromEntries(teamData.map(([key, name, abbr, primary, secondary]) => [key, { name, abbr, primary, secondary, record: "0 - 0 · NFL", roster: [`${abbr} Quarterback`, `${abbr} Runner`, `${abbr} X Receiver`, `${abbr} Z Receiver`, `${abbr} Tight End`, `${abbr} Left Tackle`, `${abbr} Left Guard`, `${abbr} Center`, `${abbr} Right Guard`, `${abbr} Right Tackle`, `${abbr} Fullback`] }]));
+teams.seahawks.roster = ["Sam Darnold", "Kenneth Walker III", "Jaxon Smith-Njigba", "Cooper Kupp", "Rashid Shaheed", "AJ Barner", "Charles Cross", "Grey Zabel", "Jalen Sundell", "Leonard Williams", "Devon Witherspoon"];
+const teamKeys = teamData.map(([key]) => key);
+const offenseShape = [["QB", 22, 51], ["RB", 25, 59], ["WR", 20, 22], ["WR", 22, 79], ["TE", 30, 38], ["LT", 30, 39], ["LG", 30, 44], ["C", 30, 50], ["RG", 30, 56], ["RT", 30, 61], ["FB", 26, 51]];
+const defenseShape = [["CB", 44, 19], ["S", 57, 25], ["DE", 41, 38], ["DT", 43, 46], ["NT", 47, 51], ["DT", 43, 56], ["DE", 41, 64], ["LB", 51, 40], ["LB", 53, 63], ["CB", 44, 80], ["S", 67, 28]];
+const routes = { W: [30, -13, 18, "DEEP OUT"], A: [25, 9, 14, "SLUGGO"], S: [20, -6, 11, "CROSS"], D: [18, 15, 9, "FLAT"], };
+const $ = (id) => document.getElementById(id); const field = $("field");
+let selectedTeam = "seahawks", opponentIndex = teamKeys.indexOf("patriots"), yards = 0, plays = 0, score = 0, gameSeconds = 300, down = 1, distance = 10, playLive = false, openReceiver = "D", scrimmageX = 30, firstDownX = 40;
+function opponent() { return teams[teamKeys[opponentIndex]]; }
+function player(name, role, x, y, side, receiverKey) { const node = document.createElement("div"); const line = ["LT", "LG", "C", "RG", "RT", "FB"].includes(role) ? " lineman-player" : ""; node.className = `stick-player ${side}-player ${role.toLowerCase()}-player${line}`; node.style.left = `${x}%`; node.style.top = `${y}%`; node.dataset.name = name; node.dataset.role = role; if (receiverKey) node.dataset.receiver = receiverKey; if (role === "QB") node.id = "quarterback"; node.innerHTML = `<span class="stick-head"></span><span class="stick-body"></span><span class="stick-arms"></span><span class="stick-legs"></span><b class="player-label">${name}<small>${role}</small></b><strong class="route-key">${receiverKey || ""}</strong>`; return node; }
+function renderPlayers() { const offense = $("offensePlayers"), defense = $("defensePlayers"), home = teams[selectedTeam], away = opponent(); offense.replaceChildren(); defense.replaceChildren(); const keys = { 1: "D", 2: "A", 3: "W", 4: "S" }; home.roster.forEach((name, index) => { const [role, x, y] = offenseShape[index]; offense.appendChild(player(role === "QB" ? `${home.abbr} QB` : name, role, x, y, "offense", keys[index])); }); away.roster.forEach((name, index) => { const [role, x, y] = defenseShape[index]; defense.appendChild(player(name, role, x, y, "defense")); }); $("awayLabel").textContent = away.abbr; $("opponentName").textContent = away.name; $("possessionText").textContent = `${home.abbr} BALL`; setOpenReceiver(); }
+function setOpenReceiver() { document.querySelectorAll(".offense-player").forEach((node) => node.classList.remove("open-receiver", "covered-receiver")); const target = document.querySelector(`[data-receiver="${openReceiver}"]`); if (target) target.classList.add("open-receiver"); }
+function updateTeam() { const team = teams[selectedTeam]; document.documentElement.style.setProperty("--team-primary", team.primary); document.documentElement.style.setProperty("--team-secondary", team.secondary); $("teamName").textContent = team.name; $("teamRecord").textContent = team.record; $("homeLabel").textContent = team.abbr; renderPlayers(); }
+function updateStats() { $("yards").textContent = yards; $("plays").textContent = plays; $("homeScore").textContent = score; $("possession").textContent = `${Math.floor(gameSeconds / 60)}:${String(gameSeconds % 60).padStart(2, "0")}`; const suffix = ["th", "st", "nd", "rd"][down] || "th"; $("downDistance").innerHTML = `${down}${suffix} &amp; ${distance}`; $("playText").textContent = `${down}${suffix} & ${distance} · OWN ${25 + yards}`; $("clock").textContent = `${Math.floor(gameSeconds / 60)}:${String(gameSeconds % 60).padStart(2, "0")}`; }
+function toast(message) { const display = $("fieldToast"); display.textContent = message; display.classList.remove("show"); void display.offsetWidth; display.classList.add("show"); }
+function resetPlay() { const qb = $("quarterback"); if (qb) { qb.style.left = "22%"; qb.style.top = "51%"; qb.classList.remove("running"); } document.querySelectorAll("[data-receiver]").forEach((node) => { const shape = offenseShape.find((entry) => entry[0] === node.dataset.role); if (shape) { node.style.left = `${shape[1]}%`; node.style.top = `${shape[2]}%`; } }); document.querySelectorAll(".defense-player").forEach((node, index) => { node.style.left = `${defenseShape[index][1]}%`; node.style.top = `${defenseShape[index][2]}%`; node.classList.remove("rushing", "coverage-player"); }); }
+function move(dx, dy) { if (!playLive) return; const qb = $("quarterback"); qb.style.left = `${Math.max(12, Math.min(83, parseFloat(qb.style.left) + dx * 2))}%`; qb.style.top = `${Math.max(11, Math.min(87, parseFloat(qb.style.top) + dy * 2))}%`; qb.classList.add("running"); }
+function hike() { if (playLive) return; resetPlay(); openReceiver = ["W", "A", "S", "D"][Math.floor(Math.random() * 4)]; setOpenReceiver(); playLive = true; field.classList.add("play-live"); toast("HIKE!"); $("playStatus").textContent = `CPU defense is closing. ${routes[openReceiver][3]} is open; pass with ${openReceiver}.`; document.querySelectorAll(".defense-player").forEach((node, index) => { node.style.left = `${Math.min(80, parseFloat(node.style.left) + (index % 3) * 2)}%`; node.classList.add("rushing"); }); ["W", "A", "S", "D"].filter((key) => key !== openReceiver).forEach((key, index) => { const target = document.querySelector(`[data-receiver="${key}"]`), defender = document.querySelectorAll(".defense-player")[index]; if (target && defender) { target.classList.add("covered-receiver"); defender.classList.add("coverage-player"); defender.style.left = `${parseFloat(target.style.left) + 4}%`; defender.style.top = target.style.top; } }); }
+function pass(receiver) { if (!playLive) { $("playStatus").textContent = "Press ↓ to hike before choosing a pass."; return; } const [dx, dy, gain, name] = routes[receiver], target = document.querySelector(`[data-receiver="${receiver}"]`), ball = $("ball"); plays += 1; gameSeconds = Math.max(0, gameSeconds - 8); playLive = false; field.classList.remove("play-live"); if (receiver !== openReceiver || !target) { toast("INCOMPLETE!"); finishDown(0, false); return; } const x = Math.min(90, parseFloat(target.style.left) + dx), y = Math.max(10, Math.min(88, parseFloat(target.style.top) + dy)); target.style.left = `${x}%`; target.style.top = `${y}%`; target.classList.add("catching"); ball.style.left = `${x}%`; ball.style.top = `${y}%`; ball.style.opacity = "1"; $("playStatus").textContent = `${target.dataset.name} ran the ${name} for ${gain} yards.`; setTimeout(() => { ball.style.opacity = "0"; target.classList.remove("catching"); toast("COMPLETE!"); finishDown(gain, true); }, 520); }
+function finishDown(gain, complete) { if (complete) { yards += gain; distance = Math.max(0, distance - gain); shiftFormation(gain); } if (yards >= 75) { score += 7; endGame("Touchdown! New opponent loading..."); return; } if (distance <= 0) { down = 1; distance = 10; $("playStatus").textContent = "First down! Press ↓ for the next snap."; } else if (down === 4) { endGame("Turnover on downs. New opponent loading..."); return; } else { down += 1; $("playStatus").textContent = `Play over. ${down}${["th", "st", "nd", "rd"][down] || "th"} down: press ↓ to hike.`; } resetPlay(); updateStats(); }
+function shiftFormation(gain) { const shift = Math.min(14, gain * .72); document.querySelectorAll(".offense-player, .defense-player").forEach((node) => { node.style.left = `${Math.min(90, parseFloat(node.style.left) + shift)}%`; }); scrimmageX = Math.min(78, scrimmageX + shift); firstDownX = Math.min(88, firstDownX + shift); $("scrimmageLine").style.left = `${scrimmageX}%`; $("firstDown").style.left = `${firstDownX}%`; }
+function endGame(message) { opponentIndex = (opponentIndex + 1) % teamKeys.length; playLive = false; resetPlay(); updateTeam(); $("playStatus").textContent = `${message} You now face ${opponent().name}. Restart for a fresh score.`; updateStats(); toast(`NEXT: ${opponent().abbr}`); }
+function resetGame() { yards = 0; plays = 0; score = 0; gameSeconds = 300; down = 1; distance = 10; scrimmageX = 30; firstDownX = 40; openReceiver = "D"; field.classList.remove("play-live"); resetPlay(); $("scrimmageLine").style.left = `${scrimmageX}%`; $("firstDown").style.left = `${firstDownX}%`; $("playStatus").textContent = "Press ↓ to hike, then choose a route."; updateStats(); toast("KICKOFF"); }
+$("teamSelect").replaceChildren(...teamData.map(([key, name]) => new Option(name, key))); $("teamSelect").value = selectedTeam; $("teamSelect").addEventListener("change", (event) => { selectedTeam = event.target.value; opponentIndex = (teamKeys.indexOf(selectedTeam) + 1) % teamKeys.length; updateTeam(); resetGame(); }); $("restartButton").addEventListener("click", resetGame);
+document.addEventListener("keydown", (event) => { const key = event.key.toLowerCase(); if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d"].includes(key)) event.preventDefault(); if (key === "arrowdown") hike(); if (key === "arrowup") move(0, -4); if (key === "arrowleft") move(-4, 0); if (key === "arrowright") move(4, 0); if (["w", "a", "s", "d"].includes(key)) pass(key.toUpperCase()); });
+updateTeam(); updateStats(); setInterval(() => { if (gameSeconds > 0) { gameSeconds -= 1; updateStats(); } }, 1000);

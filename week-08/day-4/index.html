@@ -36,16 +36,12 @@
           <div><strong id="teamName">Seattle Seahawks</strong><small id="teamRecord">12 - 5 · NFC West</small></div>
         </div>
         <div class="opponent-card"><span>Opponent</span><strong id="opponentName">New England Patriots</strong></div>
-        <div class="mode-switch" role="group" aria-label="Play mode">
-          <button class="mode-button active" data-mode="offense" type="button">Offense</button><button
-            class="mode-button" data-mode="defense" type="button">Defense</button>
-        </div>
         <div class="tips">
           <p><span class="key-group">↓</span> Hike the ball</p>
-          <p><span class="key-group">↑ ← →</span> Move player after hike</p>
-          <p><span class="key-group">W A S D</span> Pass / tackle</p>
+          <p><span class="key-group">↑ ← →</span> Scramble with QB</p>
+          <p><span class="key-group">W A S D</span> Throw to a route</p>
         </div>
-        <div class="play-status" id="playStatus" aria-live="polite">Choose a receiver with W, A, S, or D.</div>
+        <div class="play-status" id="playStatus" aria-live="polite">Press ↓ to hike, then choose a route.</div>
       </aside>
       <section class="field-wrap">
         <div class="field-heading"><span id="possessionText">SEA BALL</span><span id="playText">1ST &amp; 10 · OWN
@@ -80,7 +76,7 @@
       <div class="drive-stat"><small>Plays</small><strong id="plays">0</strong></div>
       <div class="drive-stat"><small>Possession</small><strong id="possession">1:59</strong></div>
     </section>
-    <p class="footer-note">↓ hikes the ball. Move after the snap. WASD passes on offense and tackles on defense.</p>
+    <p class="footer-note">↓ hikes the ball. Move after the snap. WASD throws to the four route concepts.</p>
   </main>
   <script src="app.js"></script>
 </body>

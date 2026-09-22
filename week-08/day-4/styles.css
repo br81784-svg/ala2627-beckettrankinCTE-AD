@@ -6,7 +6,9 @@
   --field-dark: #125c3b;
   --navy: #071d35;
   --line: rgba(255, 255, 255, .62);
-  --muted: #777d78
+  --muted: #777d78;
+  --lime: #d7f36b;
+  --glow: rgba(215, 243, 107, .22)
 }
 
 * {
@@ -15,16 +17,18 @@
 
 body {
   margin: 0;
-  background: linear-gradient(135deg, var(--navy) 0 18%, #0d3b35 52%, #165b3f 100%);
+  background: radial-gradient(circle at 75% 8%, rgba(238, 108, 53, .18), transparent 28%), radial-gradient(circle at 10% 80%, rgba(105, 190, 40, .18), transparent 30%), linear-gradient(135deg, #061525 0%, #0b2f35 48%, #164c3b 100%);
   color: var(--paper);
   font-family: Arial, Helvetica, sans-serif;
-  min-height: 100vh
+  min-height: 100vh;
+  overflow-x: hidden
 }
 
 .game-shell {
   width: min(1240px, calc(100% - 40px));
   margin: auto;
-  padding: 28px 0 22px
+  padding: 28px 0 22px;
+  position: relative
 }
 
 .topbar {
@@ -53,7 +57,8 @@ body {
   background: #8ac926;
   color: var(--navy);
   font-size: 12px;
-  letter-spacing: -.08em
+  letter-spacing: -.08em;
+  box-shadow: 5px 5px 0 var(--orange)
 }
 
 .league-tag,
@@ -97,7 +102,8 @@ body {
   justify-content: center;
   align-items: center;
   gap: clamp(35px, 8vw, 130px);
-  padding: 28px 0 22px
+  padding: 28px 0 22px;
+  position: relative
 }
 
 .team-score {
@@ -123,7 +129,8 @@ body {
   text-align: center;
   border-left: 1px solid rgba(223, 233, 220, .25);
   border-right: 1px solid rgba(223, 233, 220, .25);
-  padding: 0 29px
+  padding: 0 29px;
+  min-width: 108px
 }
 
 .game-clock span,
@@ -281,7 +288,8 @@ body {
   font-weight: 800;
   font-size: 11px;
   letter-spacing: .12em;
-  padding: 12px 17px
+  padding: 12px 17px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .18)
 }
 
 .field-heading span:last-child {
@@ -294,9 +302,9 @@ body {
   overflow: hidden;
   height: clamp(370px, 44vw, 510px);
   background-color: var(--field);
-  background-image: repeating-linear-gradient(90deg, transparent 0, transparent 9.7%, rgba(255, 255, 255, .08) 9.7%, rgba(255, 255, 255, .08) 10%), linear-gradient(90deg, var(--field-dark), var(--field) 15%, var(--field) 85%, var(--field-dark));
+  background-image: repeating-linear-gradient(90deg, transparent 0, transparent 9.7%, rgba(255, 255, 255, .08) 9.7%, rgba(255, 255, 255, .08) 10%), repeating-linear-gradient(0deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 5px), linear-gradient(90deg, var(--field-dark), var(--field) 15%, var(--field) 85%, var(--field-dark));
   border: 5px solid #f7f4e9;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .28);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .28), 0 18px 38px rgba(0, 0, 0, .3);
   outline: 0
 }
 
@@ -404,7 +412,8 @@ body {
   bottom: 0;
   left: 30%;
   border-left: 3px solid #ffd047;
-  opacity: .9
+  opacity: .9;
+  filter: drop-shadow(0 0 5px rgba(255, 208, 71, .8))
 }
 
 .scrimmage-line {
@@ -665,7 +674,8 @@ body {
   transform: translate(-50%, -50%);
   color: #fff;
   transition: left .18s ease, top .18s ease, transform .18s ease;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .45))
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .45));
+  z-index: 4
 }
 
 .stick-head {
@@ -718,7 +728,8 @@ body {
 }
 
 .offense-player {
-  color: var(--team-primary, #8ac926)
+  color: var(--team-primary, #8ac926);
+  filter: drop-shadow(0 0 5px var(--glow)) drop-shadow(0 3px 3px rgba(0, 0, 0, .45))
 }
 
 .offense-player .stick-body,
@@ -817,7 +828,8 @@ body {
 
 .open-receiver {
   color: #e5ff77;
-  filter: drop-shadow(0 0 7px #e5ff77)
+  filter: drop-shadow(0 0 7px var(--lime)) drop-shadow(0 0 14px var(--lime));
+  animation: receiverPulse .55s ease-in-out infinite alternate
 }
 
 .covered-receiver {
@@ -867,6 +879,16 @@ body {
 
   100% {
     transform: translate(-50%, -50%) scale(1)
+  }
+}
+
+@keyframes receiverPulse {
+  from {
+    opacity: .72
+  }
+
+  to {
+    opacity: 1
   }
 }
 
