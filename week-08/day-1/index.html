@@ -157,18 +157,23 @@
     }
 
     .ribbon-label,
-    .ribbon-time {
+    .ticker a {
       color: var(--muted);
       font: 10px var(--mono);
     }
 
-    .ribbon-state {
+    .ticker a {
       color: var(--green);
+      text-decoration: none;
+    }
+
+    .ticker a:hover {
+      text-decoration: underline;
     }
 
     .markets {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       margin: 13px 0 25px;
       border: 1px solid var(--line);
       background: var(--glass);
@@ -176,15 +181,28 @@
 
     .index {
       display: flex;
-      min-height: 92px;
-      align-items: center;
+      min-height: 116px;
+      flex-direction: column;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 20px;
-      padding: 17px 21px;
+      gap: 18px;
+      padding: 19px 21px;
+      color: var(--ink);
+      text-decoration: none;
     }
 
     .index+.index {
       border-left: 1px solid var(--line);
+    }
+
+    .index:hover {
+      background: rgba(164, 229, 155, .07);
+    }
+
+    .index:focus-visible,
+    .ticker a:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: -3px;
     }
 
     .index-name {
@@ -194,173 +212,9 @@
     }
 
     .index-symbol {
-      margin-top: 4px;
-      font: 12px var(--mono);
-    }
-
-    .index-reading {
-      text-align: right;
-    }
-
-    .index-price {
-      font: 500 21px/1.2 var(--mono);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .index-change {
-      margin-top: 4px;
       color: var(--green);
-      font: 11px var(--mono);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .index-change.down {
-      color: var(--red);
-    }
-
-    .workbench {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(340px, .85fr);
-      gap: 14px;
-      align-items: start;
-    }
-
-    .panel {
-      min-width: 0;
-      border: 1px solid var(--line);
-      background: var(--glass);
-    }
-
-    .panel-head {
-      display: flex;
-      min-height: 66px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 13px 17px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .panel-title {
-      margin: 3px 0 0;
-      font: 500 19px/1.2 var(--serif);
-    }
-
-    .symbol {
-      color: var(--muted);
       font: 10px var(--mono);
-    }
-
-    .session-tag {
-      padding: 5px 8px;
-      border: 1px solid var(--line);
-      color: #c6cdc3;
-      font: 9px var(--mono);
       text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .chart-frame {
-      height: 510px;
-    }
-
-    .chart-frame iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .gainers-frame {
-      height: 632px;
-      overflow: auto;
-    }
-
-    .gainers-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    .gainers-table th {
-      height: 37px;
-      color: var(--muted);
-      font: 9px var(--mono);
-      font-weight: 400;
-      text-align: left;
-      text-transform: uppercase;
-    }
-
-    .gainers-table th,
-    .gainers-table td {
-      padding: 0 11px;
-    }
-
-    .gainers-table th:first-child,
-    .gainers-table td:first-child {
-      width: 40px;
-      padding-left: 15px;
-      color: var(--muted);
-    }
-
-    .gainers-table th:nth-child(3),
-    .gainers-table td:nth-child(3) {
-      width: 80px;
-      text-align: right;
-    }
-
-    .gainers-table th:last-child,
-    .gainers-table td:last-child {
-      width: 78px;
-      padding-right: 15px;
-      text-align: right;
-    }
-
-    .gainers-table tbody tr {
-      height: 51px;
-      border-top: 1px solid var(--line);
-    }
-
-    .gainers-table td {
-      font: 11px var(--mono);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .gainers-table .stock-price {
-      color: var(--ink);
-      white-space: nowrap;
-    }
-
-    .gainers-table .company {
-      overflow: hidden;
-    }
-
-    .stock-name {
-      overflow: hidden;
-      color: var(--ink);
-      font: 500 11px var(--sans);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .stock-symbol {
-      overflow: hidden;
-      margin-top: 2px;
-      color: var(--muted);
-      font: 9px var(--mono);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .gainers-table .daily-gain {
-      color: var(--green);
-    }
-
-    .gainers-message {
-      padding: 20px 15px;
-      color: var(--muted);
-      font: 11px var(--mono);
-      text-align: center;
     }
 
     .source {
@@ -387,16 +241,21 @@
         width: min(100% - 32px, 680px);
       }
 
-      .workbench {
+      .markets {
         grid-template-columns: 1fr;
       }
 
-      .chart-frame {
-        height: 440px;
+      .index {
+        min-height: 82px;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 17px;
       }
 
-      .gainers-frame {
-        height: 610px;
+      .index+.index {
+        border-top: 1px solid var(--line);
+        border-left: 0;
       }
     }
 
@@ -428,53 +287,8 @@
         margin: 9px 0 16px;
       }
 
-      .index {
-        min-height: 82px;
-        gap: 8px;
-        padding: 12px;
-      }
-
       .index-name {
         font-size: 8px;
-      }
-
-      .index-price {
-        font-size: 16px;
-      }
-
-      .index-change {
-        font-size: 9px;
-      }
-
-      .chart-frame {
-        height: 390px;
-      }
-
-      .gainers-frame {
-        height: 590px;
-      }
-
-      .gainers-table th,
-      .gainers-table td {
-        padding-right: 6px;
-        padding-left: 6px;
-      }
-
-      .gainers-table th:first-child,
-      .gainers-table td:first-child {
-        width: 31px;
-        padding-left: 9px;
-      }
-
-      .gainers-table th:nth-child(3),
-      .gainers-table td:nth-child(3) {
-        width: 70px;
-      }
-
-      .gainers-table th:last-child,
-      .gainers-table td:last-child {
-        width: 69px;
-        padding-right: 9px;
       }
 
       .source {
@@ -506,7 +320,7 @@
           <div class="brand-place">New York Stock Exchange</div>
         </div>
       </div>
-      <div class="market-state"><span class="live-dot" aria-hidden="true"></span>Live market data</div>
+      <div class="market-state">Yahoo Finance links</div>
     </header>
 
     <section class="intro" aria-labelledby="page-title">
@@ -514,277 +328,37 @@
         <div class="eyebrow">U.S. equities · Market watch</div>
         <h1 id="page-title">The closing bell.</h1>
       </div>
-      <p class="intro-note">The Dow Jones and S&amp;P 500, with today's strongest stock performers.</p>
+      <p class="intro-note">Open the latest Dow Jones, S&amp;P 500, and stock-gainer information on Yahoo Finance.</p>
     </section>
 
-    <section class="ticker" aria-label="Market data status">
+    <section class="ticker" aria-label="Yahoo Finance market links">
       <span class="ribbon-label">U.S. equities · New York</span>
-      <span class="ribbon-state"><span class="live-dot" aria-hidden="true"></span><span id="data-status"
-          role="status">Connecting to market data</span></span>
-      <time class="ribbon-time" id="last-updated">--:--:-- ET</time>
+      <a href="https://finance.yahoo.com/screener/predefined/day_gainers/" target="_blank"
+        rel="noopener noreferrer">Explore today's stock gainers at Yahoo Finance ↗</a>
     </section>
 
-    <section class="markets" aria-label="Major indices">
-      <div class="index">
-        <div>
-          <div class="index-name">Dow Jones Industrial Average</div>
-          <div class="index-symbol">DJI · NYSE</div>
-        </div>
-        <div class="index-reading">
-          <div class="index-price" id="dji-price">Loading</div>
-          <div class="index-change" id="dji-change">--</div>
-        </div>
-      </div>
-      <div class="index">
-        <div>
-          <div class="index-name">Standard &amp; Poor's 500</div>
-          <div class="index-symbol">SPX · USA</div>
-        </div>
-        <div class="index-reading">
-          <div class="index-price" id="spx-price">Loading</div>
-          <div class="index-change" id="spx-change">--</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="workbench" aria-label="Market charts and stock gainers">
-      <article class="panel" aria-labelledby="dow-heading">
-        <header class="panel-head">
-          <div>
-            <div class="section-label">Index performance</div>
-            <h2 class="panel-title" id="dow-heading">Dow Jones Industrial Average <span class="symbol">· DJI</span></h2>
-          </div>
-          <span class="session-tag">Today's session</span>
-        </header>
-        <div class="chart-frame">
-          <iframe title="Intraday Dow Jones Industrial Average chart"
-            src="https://www.tradingview.com/widgetembed/?frameElementId=dow-chart&symbol=DJ%3ADJI&interval=5&hide_side_toolbar=true&allow_symbol_change=false&save_image=false&toolbar_bg=%23121714&theme=dark&style=3&timezone=America%2FNew_York&withdateranges=true&hideideas=true&locale=en&backgroundColor=%23121714&gridColor=rgba(164%2C%20170%2C%20161%2C%200.08)"
-            allowtransparency="true" scrolling="no" allowfullscreen></iframe>
-        </div>
-      </article>
-
-      <article class="panel" aria-labelledby="gainers-heading">
-        <header class="panel-head">
-          <div>
-            <div class="section-label">Ranked by daily change</div>
-            <h2 class="panel-title" id="gainers-heading">Today's top 10 gainers</h2>
-          </div>
-          <span class="session-tag">U.S. stocks</span>
-        </header>
-        <div class="gainers-frame">
-          <table class="gainers-table" aria-label="Ten highest percentage gainers among U.S.-listed stocks">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Company</th>
-                <th scope="col">Price</th>
-                <th scope="col">Day %</th>
-              </tr>
-            </thead>
-            <tbody id="gainers-list">
-              <tr>
-                <td colspan="4" class="gainers-message">Loading today's gainers</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
+    <section class="markets" aria-label="Yahoo Finance market quotes and stock screeners">
+      <a class="index" href="https://finance.yahoo.com/quote/%5EDJI/" target="_blank" rel="noopener noreferrer">
+        <span class="index-name">Dow Jones Industrial Average</span>
+        <span class="index-symbol">Open DJI quote at Yahoo Finance ↗</span>
+      </a>
+      <a class="index" href="https://finance.yahoo.com/quote/%5EGSPC/" target="_blank" rel="noopener noreferrer">
+        <span class="index-name">Standard &amp; Poor's 500</span>
+        <span class="index-symbol">Open S&amp;P 500 quote at Yahoo Finance ↗</span>
+      </a>
+      <a class="index" href="https://finance.yahoo.com/screener/predefined/day_gainers/" target="_blank"
+        rel="noopener noreferrer">
+        <span class="index-name">Today's stock gainers</span>
+        <span class="index-symbol">Open Yahoo Finance screener ↗</span>
+      </a>
     </section>
 
     <footer class="source">
-      <span>Market data and charts by TradingView</span>
+      <span>Quotes and stock screeners by Yahoo Finance</span>
       <a href="https://commons.wikimedia.org/wiki/File:New_York_Stock_Exchange_August_2017_02.jpg" target="_blank"
-        rel="noreferrer">NYSE photo: Arild Vågen · CC BY-SA 4.0</a>
-      <a href="https://www.tradingview.com/markets/stocks-usa/market-movers-gainers/" target="_blank"
-        rel="noreferrer">Explore U.S. market movers ↗</a>
+        rel="noopener noreferrer">NYSE photo: Arild Vågen · CC BY-SA 4.0</a>
     </footer>
   </main>
-  <script>
-    (function () {
-      var endpoint = "https://scanner.tradingview.com/america/scan";
-      var status = document.getElementById("data-status");
-      var updated = document.getElementById("last-updated");
-      var list = document.getElementById("gainers-list");
-      var refreshing = false;
-      var indexTickers = ["DJ:DJI", "SP:SPX"];
-      var quoteRequest = {
-        symbols: { tickers: indexTickers, query: { types: [] } },
-        columns: ["name", "close", "change", "change_abs"],
-        range: [0, 10]
-      };
-      var gainersRequest = {
-        filter: [
-          { left: "change", operation: "greater", right: 0 },
-          { left: "close", operation: "egreater", right: 1 },
-          { left: "exchange", operation: "in_range", right: ["NASDAQ", "NYSE", "NYSEARCA", "AMEX"] }
-        ],
-        options: { lang: "en" },
-        symbols: { query: { types: ["stock"] } },
-        columns: ["name", "close", "change", "change_abs", "description", "exchange"],
-        sort: { sortBy: "change", sortOrder: "desc" },
-        range: [0, 10]
-      };
-
-      function scan(payload) {
-        return fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=UTF-8" },
-          body: JSON.stringify(payload)
-        }).then(function (response) {
-          if (!response.ok) throw new Error("Market data request failed");
-          return response.json();
-        });
-      }
-
-      function formatPrice(value) {
-        return Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
-
-      function formatChange(value) {
-        var number = Number(value);
-        return (number > 0 ? "+" : "") + number.toFixed(2) + "%";
-      }
-
-      function isQuoteRow(row) {
-        return row && Array.isArray(row.d) && row.d.length >= 4 &&
-          row.d.slice(1, 4).every(function (value) { return Number.isFinite(Number(value)); });
-      }
-
-      function readSavedQuote(ticker) {
-        try {
-          var saved = JSON.parse(localStorage.getItem("market-quote:" + ticker));
-          return isQuoteRow(saved) ? saved : null;
-        } catch (error) {
-          return null;
-        }
-      }
-
-      function saveQuote(ticker, row) {
-        try {
-          localStorage.setItem("market-quote:" + ticker, JSON.stringify(row));
-        } catch (error) {
-        }
-      }
-
-      function renderIndex(row, prefix, ticker) {
-        var price = document.getElementById(prefix + "-price");
-        var change = document.getElementById(prefix + "-change");
-        var saved = false;
-        if (isQuoteRow(row)) {
-          saveQuote(ticker, row);
-        } else {
-          row = readSavedQuote(ticker);
-          saved = Boolean(row);
-        }
-        if (!row) {
-          price.textContent = "Unavailable";
-          change.textContent = "Live quote unavailable";
-          return "missing";
-        }
-        price.textContent = formatPrice(row.d[1]);
-        change.textContent = (saved ? "Saved · " : "") + formatChange(row.d[2]) + "  (" + (row.d[3] > 0 ? "+" : "") + formatPrice(row.d[3]) + ")";
-        change.classList.toggle("down", row.d[2] < 0);
-        return saved ? "saved" : "live";
-      }
-
-      function loadQuotes() {
-        function findRows(result) {
-          var rows = {};
-          (result.data || []).forEach(function (row) { rows[row.s] = row; });
-          return rows;
-        }
-
-        function loadSingle(ticker) {
-          var request = {
-            symbols: { tickers: [ticker], query: { types: [] } },
-            columns: quoteRequest.columns,
-            range: [0, 1]
-          };
-          return scan(request).then(findRows).then(function (rows) {
-            return rows[ticker] || null;
-          }).catch(function () {
-            return null;
-          });
-        }
-
-        return scan(quoteRequest).then(findRows).catch(function () {
-          return {};
-        }).then(function (quotes) {
-          var missing = indexTickers.filter(function (ticker) { return !isQuoteRow(quotes[ticker]); });
-          return Promise.all(missing.map(function (ticker) {
-            return loadSingle(ticker).then(function (row) {
-              if (row) quotes[ticker] = row;
-            });
-          })).then(function () { return quotes; });
-        });
-      }
-
-      function renderGainers(rows) {
-        list.replaceChildren();
-        rows.forEach(function (row, index) {
-          var values = row.d;
-          var tr = document.createElement("tr");
-          var rank = document.createElement("td");
-          rank.textContent = String(index + 1).padStart(2, "0");
-          tr.appendChild(rank);
-
-          var company = document.createElement("td");
-          company.className = "company";
-          var name = document.createElement("div");
-          name.className = "stock-name";
-          name.textContent = values[4] || values[0];
-          var symbol = document.createElement("div");
-          symbol.className = "stock-symbol";
-          symbol.textContent = row.s;
-          company.append(name, symbol);
-          tr.appendChild(company);
-
-          var price = document.createElement("td");
-          price.className = "stock-price";
-          price.textContent = "$" + formatPrice(values[1]);
-          tr.appendChild(price);
-
-          var gain = document.createElement("td");
-          gain.className = "daily-gain";
-          gain.textContent = formatChange(values[2]);
-          tr.appendChild(gain);
-          list.appendChild(tr);
-        });
-        if (!rows.length) list.innerHTML = '<tr><td colspan="4" class="gainers-message">No advancing stocks found</td></tr>';
-      }
-
-      function refresh() {
-        if (refreshing) return;
-        refreshing = true;
-        var failed = false;
-        var savedQuote = false;
-        var quoteUpdate = loadQuotes().then(function (quotes) {
-          var djiState = renderIndex(quotes["DJ:DJI"], "dji", "DJ:DJI");
-          var spxState = renderIndex(quotes["SP:SPX"], "spx", "SP:SPX");
-          failed = djiState === "missing" || spxState === "missing";
-          savedQuote = djiState === "saved" || spxState === "saved";
-        });
-        var gainersUpdate = scan(gainersRequest).then(function (result) {
-          renderGainers(result.data || []);
-        }).catch(function () {
-          failed = true;
-          list.innerHTML = '<tr><td colspan="4" class="gainers-message">Unable to load gainers; retry shortly</td></tr>';
-        });
-
-        Promise.all([quoteUpdate, gainersUpdate]).then(function () {
-          status.textContent = failed ? "Some market data unavailable" : savedQuote ? "Showing saved quotes" : "Live market data";
-          var now = new Date();
-          updated.textContent = now.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit", second: "2-digit" }) + " ET";
-          updated.dateTime = now.toISOString();
-        }).finally(function () {
-          refreshing = false;
-        });
-      }
-
-      refresh();
-      window.setInterval(refresh, 60000);
-    })();
-  </script>
 </body>
 
 </html>
