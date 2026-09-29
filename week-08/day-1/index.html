@@ -606,8 +606,9 @@
       var updated = document.getElementById("last-updated");
       var list = document.getElementById("gainers-list");
       var refreshing = false;
+      var indexTickers = ["DJ:DJI", "SP:SPX"];
       var quoteRequest = {
-        symbols: { tickers: ["DJ:DJI", "SP:SPX"], query: { types: [] } },
+        symbols: { tickers: indexTickers, query: { types: [] } },
         columns: ["name", "close", "change", "change_abs"],
         range: [0, 10]
       };
@@ -644,17 +645,78 @@
         return (number > 0 ? "+" : "") + number.toFixed(2) + "%";
       }
 
-      function renderIndex(row, prefix) {
+      function isQuoteRow(row) {
+        return row && Array.isArray(row.d) && row.d.length >= 4 &&
+          row.d.slice(1, 4).every(function (value) { return Number.isFinite(Number(value)); });
+      }
+
+      function readSavedQuote(ticker) {
+        try {
+          var saved = JSON.parse(localStorage.getItem("market-quote:" + ticker));
+          return isQuoteRow(saved) ? saved : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function saveQuote(ticker, row) {
+        try {
+          localStorage.setItem("market-quote:" + ticker, JSON.stringify(row));
+        } catch (error) {
+        }
+      }
+
+      function renderIndex(row, prefix, ticker) {
         var price = document.getElementById(prefix + "-price");
         var change = document.getElementById(prefix + "-change");
+        var saved = false;
+        if (isQuoteRow(row)) {
+          saveQuote(ticker, row);
+        } else {
+          row = readSavedQuote(ticker);
+          saved = Boolean(row);
+        }
         if (!row) {
           price.textContent = "Unavailable";
-          change.textContent = "Quote could not load";
-          return;
+          change.textContent = "Live quote unavailable";
+          return "missing";
         }
         price.textContent = formatPrice(row.d[1]);
-        change.textContent = formatChange(row.d[2]) + "  (" + (row.d[3] > 0 ? "+" : "") + formatPrice(row.d[3]) + ")";
+        change.textContent = (saved ? "Saved · " : "") + formatChange(row.d[2]) + "  (" + (row.d[3] > 0 ? "+" : "") + formatPrice(row.d[3]) + ")";
         change.classList.toggle("down", row.d[2] < 0);
+        return saved ? "saved" : "live";
+      }
+
+      function loadQuotes() {
+        function findRows(result) {
+          var rows = {};
+          (result.data || []).forEach(function (row) { rows[row.s] = row; });
+          return rows;
+        }
+
+        function loadSingle(ticker) {
+          var request = {
+            symbols: { tickers: [ticker], query: { types: [] } },
+            columns: quoteRequest.columns,
+            range: [0, 1]
+          };
+          return scan(request).then(findRows).then(function (rows) {
+            return rows[ticker] || null;
+          }).catch(function () {
+            return null;
+          });
+        }
+
+        return scan(quoteRequest).then(findRows).catch(function () {
+          return {};
+        }).then(function (quotes) {
+          var missing = indexTickers.filter(function (ticker) { return !isQuoteRow(quotes[ticker]); });
+          return Promise.all(missing.map(function (ticker) {
+            return loadSingle(ticker).then(function (row) {
+              if (row) quotes[ticker] = row;
+            });
+          })).then(function () { return quotes; });
+        });
       }
 
       function renderGainers(rows) {
@@ -695,16 +757,12 @@
         if (refreshing) return;
         refreshing = true;
         var failed = false;
-        var quoteUpdate = scan(quoteRequest).then(function (result) {
-          var quotes = {};
-          (result.data || []).forEach(function (row) { quotes[row.s] = row; });
-          renderIndex(quotes["DJ:DJI"], "dji");
-          renderIndex(quotes["SP:SPX"], "spx");
-          if (!quotes["DJ:DJI"] || !quotes["SP:SPX"]) failed = true;
-        }).catch(function () {
-          failed = true;
-          renderIndex(null, "dji");
-          renderIndex(null, "spx");
+        var savedQuote = false;
+        var quoteUpdate = loadQuotes().then(function (quotes) {
+          var djiState = renderIndex(quotes["DJ:DJI"], "dji", "DJ:DJI");
+          var spxState = renderIndex(quotes["SP:SPX"], "spx", "SP:SPX");
+          failed = djiState === "missing" || spxState === "missing";
+          savedQuote = djiState === "saved" || spxState === "saved";
         });
         var gainersUpdate = scan(gainersRequest).then(function (result) {
           renderGainers(result.data || []);
@@ -714,7 +772,7 @@
         });
 
         Promise.all([quoteUpdate, gainersUpdate]).then(function () {
-          status.textContent = failed ? "Some market data unavailable" : "Live market data";
+          status.textContent = failed ? "Some market data unavailable" : savedQuote ? "Showing saved quotes" : "Live market data";
           var now = new Date();
           updated.textContent = now.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit", second: "2-digit" }) + " ET";
           updated.dateTime = now.toISOString();
