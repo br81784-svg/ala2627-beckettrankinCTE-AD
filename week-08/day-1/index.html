@@ -326,6 +326,11 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .gainers-table .stock-price {
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
     .gainers-table .company {
       overflow: hidden;
     }
@@ -640,9 +645,14 @@
       }
 
       function renderIndex(row, prefix) {
-        if (!row) return;
-        document.getElementById(prefix + "-price").textContent = formatPrice(row.d[1]);
+        var price = document.getElementById(prefix + "-price");
         var change = document.getElementById(prefix + "-change");
+        if (!row) {
+          price.textContent = "Unavailable";
+          change.textContent = "Quote could not load";
+          return;
+        }
+        price.textContent = formatPrice(row.d[1]);
         change.textContent = formatChange(row.d[2]) + "  (" + (row.d[3] > 0 ? "+" : "") + formatPrice(row.d[3]) + ")";
         change.classList.toggle("down", row.d[2] < 0);
       }
@@ -668,6 +678,7 @@
           tr.appendChild(company);
 
           var price = document.createElement("td");
+          price.className = "stock-price";
           price.textContent = "$" + formatPrice(values[1]);
           tr.appendChild(price);
 
@@ -683,20 +694,30 @@
       function refresh() {
         if (refreshing) return;
         refreshing = true;
-        Promise.all([scan(quoteRequest), scan(gainersRequest)]).then(function (results) {
+        var failed = false;
+        var quoteUpdate = scan(quoteRequest).then(function (result) {
           var quotes = {};
-          (results[0].data || []).forEach(function (row) { quotes[row.s] = row; });
+          (result.data || []).forEach(function (row) { quotes[row.s] = row; });
           renderIndex(quotes["DJ:DJI"], "dji");
           renderIndex(quotes["SP:SPX"], "spx");
-          renderGainers(results[1].data || []);
-          status.textContent = "Live market data";
+          if (!quotes["DJ:DJI"] || !quotes["SP:SPX"]) failed = true;
+        }).catch(function () {
+          failed = true;
+          renderIndex(null, "dji");
+          renderIndex(null, "spx");
+        });
+        var gainersUpdate = scan(gainersRequest).then(function (result) {
+          renderGainers(result.data || []);
+        }).catch(function () {
+          failed = true;
+          list.innerHTML = '<tr><td colspan="4" class="gainers-message">Unable to load gainers; retry shortly</td></tr>';
+        });
+
+        Promise.all([quoteUpdate, gainersUpdate]).then(function () {
+          status.textContent = failed ? "Some market data unavailable" : "Live market data";
           var now = new Date();
           updated.textContent = now.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit", second: "2-digit" }) + " ET";
           updated.dateTime = now.toISOString();
-        }).catch(function () {
-          status.textContent = "Market data unavailable";
-          var message = list.querySelector(".gainers-message");
-          if (message) message.textContent = "Unable to load market data. Refresh to try again.";
         }).finally(function () {
           refreshing = false;
         });
